@@ -180,8 +180,8 @@
 
     <!-- Firebase SDK -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { 
     getFirestore, 
     collection, 
@@ -191,14 +191,18 @@ import {
     deleteDoc, 
     updateDoc, 
     getDocs, 
-    writeBatch 
-} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    writeBatch,
+    query,
+    where,
+    orderBy
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+// Konfigurasi Firebase yang sudah diperbaiki
 const firebaseConfig = {
     apiKey: "AIzaSyCKX6uS1motUTc5EGX1PnB9c9nHiu00438",
     authDomain: "showcase-itsbad.firebaseapp.com",
     projectId: "showcase-itsbad",
-    storageBucket: "showcase-itsbad.firebasestorage.app",
+    storageBucket: "showcase-itsbad.appspot.com", // Diperbaiki dari .firebasestorage.app
     messagingSenderId: "1041967882961",
     appId: "1:1041967882961:web:941e45e75fcee0c2d95bf0",
     measurementId: "G-3TLH4LEGN7"
@@ -209,6 +213,7 @@ let isAdmin = false;
 let allProducts = [];
 let currentPlatform = null;
 let isEditing = false;
+let unsubscribe = null; // Untuk cleanup listener
 
 /* ===============================
    INIT FIREBASE (FIX STABIL)
@@ -236,38 +241,75 @@ async function init() {
 
 function hideLoader() {
     const loader = document.getElementById('main-loader');
-    loader.style.opacity = '0';
-    setTimeout(() => {
-        loader.classList.add('hidden');
-        document.getElementById('landing-view').classList.remove('hidden');
-    }, 500);
+    if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            document.getElementById('landing-view').classList.remove('hidden');
+            lucide.createIcons();
+        }, 500);
+    }
 }
 
 /* ===============================
-   REALTIME LISTENER
+   REALTIME LISTENER (DIPERBAIKI)
 ================================ */
 function setupRealtimeData() {
+    // Cleanup listener lama jika ada
+    if (unsubscribe) {
+        unsubscribe();
+    }
+    
     const colRef = collection(db, 'products');
-    onSnapshot(colRef, (snapshot) => {
-        allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        if (currentPlatform) renderGrid();
-    }, (err) => console.error("Firestore Error:", err));
+    
+    // Gunakan query yang lebih stabil
+    const q = query(colRef);
+    
+    unsubscribe = onSnapshot(q, (snapshot) => {
+        allProducts = snapshot.docs.map(d => ({ 
+            id: d.id, 
+            ...d.data() 
+        }));
+        
+        // Render ulang jika platform sedang aktif
+        if (currentPlatform) {
+            renderGrid();
+        }
+    }, (err) => {
+        console.error("Firestore Error:", err);
+        // Coba reconnect setelah error
+        setTimeout(setupRealtimeData, 3000);
+    });
 }
 
 /* ===============================
-   SIMPAN PRODUK
+   SIMPAN PRODUK (DIPERBAIKI)
 ================================ */
 document.getElementById('product-form').onsubmit = async (e) => {
     e.preventDefault();
-    if (!isAdmin || !user) return;
+    if (!isAdmin || !user) {
+        alert("Anda harus login sebagai admin!");
+        return;
+    }
+
+    // Validasi input
+    const title = document.getElementById('in-title').value.trim();
+    const link = document.getElementById('in-link').value.trim();
+    const order = document.getElementById('in-order').value;
+    
+    if (!title || !link || !order) {
+        alert("Judul, Link, dan Urutan harus diisi!");
+        return;
+    }
 
     const payload = {
-        title: document.getElementById('in-title').value,
-        description: document.getElementById('in-desc').value,
-        link: document.getElementById('in-link').value,
-        image: document.getElementById('in-image').value,
-        sortOrder: parseInt(document.getElementById('in-order').value) || 0,
+        title: title,
+        description: document.getElementById('in-desc').value.trim() || "",
+        link: link,
+        image: document.getElementById('in-image').value.trim() || "",
+        sortOrder: parseInt(order) || 0,
         platform: currentPlatform,
+        createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
     };
 
@@ -275,31 +317,47 @@ document.getElementById('product-form').onsubmit = async (e) => {
         if (isEditing) {
             const id = document.getElementById('edit-id').value;
             await updateDoc(doc(db, 'products', id), payload);
-            alert("Produk diperbarui!");
+            alert("✅ Produk berhasil diperbarui!");
         } else {
             await addDoc(collection(db, 'products'), payload);
-            alert("Produk ditambahkan!");
+            alert("✅ Produk berhasil ditambahkan!");
         }
         resetForm();
     } catch (err) {
         console.error("Save Error:", err);
-        alert("Gagal simpan: " + err.message);
+        alert("❌ Gagal simpan: " + err.message);
     }
 };
 
 /* ===============================
-   HAPUS SEMUA
+   HAPUS SEMUA (DIPERBAIKI)
 ================================ */
 window.clearAllData = async () => {
-    if (!isAdmin) return;
-    if (confirm("Hapus seluruh produk dari database?")) {
-        const snapshot = await getDocs(collection(db, 'products'));
-        const batch = writeBatch(db);
-        snapshot.docs.forEach((d) => {
-            batch.delete(doc(db, 'products', d.id));
-        });
-        await batch.commit();
-        alert("Database dibersihkan.");
+    if (!isAdmin) {
+        alert("Anda harus login sebagai admin!");
+        return;
+    }
+    
+    if (confirm("⚠️ PERINGATAN: Hapus seluruh produk dari database?\nTindakan ini tidak dapat dibatalkan!")) {
+        try {
+            const snapshot = await getDocs(collection(db, 'products'));
+            
+            if (snapshot.empty) {
+                alert("Database sudah kosong.");
+                return;
+            }
+            
+            const batch = writeBatch(db);
+            snapshot.docs.forEach((d) => {
+                batch.delete(doc(db, 'products', d.id));
+            });
+            
+            await batch.commit();
+            alert("✅ Database berhasil dibersihkan.");
+        } catch (err) {
+            console.error("Clear Error:", err);
+            alert("❌ Gagal menghapus data: " + err.message);
+        }
     }
 };
 
@@ -320,27 +378,35 @@ window.switchView = (view, platform = null) => {
         renderGrid();
     }
     window.scrollTo(0,0);
-    lucide.createIcons();
+    setTimeout(() => lucide.createIcons(), 100);
 };
 
 window.toggleLoginModal = (show) => {
     const modal = document.getElementById('login-modal');
     modal.classList.toggle('hidden', !show);
-    if (show) modal.classList.add('flex');
-    else modal.classList.remove('flex');
+    if (show) {
+        modal.classList.add('flex');
+        document.getElementById('login-pass').value = '';
+    } else {
+        modal.classList.remove('flex');
+    }
 };
 
 document.getElementById('login-form').onsubmit = (e) => {
     e.preventDefault();
-    if (document.getElementById('login-pass').value === '110603') {
+    const password = document.getElementById('login-pass').value;
+    
+    if (password === '110603') {
         isAdmin = true;
         toggleLoginModal(false);
         document.getElementById('admin-panel').classList.remove('hidden');
         document.getElementById('admin-indicator').classList.remove('hidden');
         document.getElementById('spacer-nav').classList.add('hidden');
         renderGrid();
+        setTimeout(() => lucide.createIcons(), 100);
+        alert("✅ Login berhasil sebagai Admin!");
     } else {
-        alert("Password Salah!");
+        alert("❌ Password salah!");
     }
 };
 
@@ -349,17 +415,20 @@ window.logoutAdmin = () => {
     document.getElementById('admin-panel').classList.add('hidden');
     document.getElementById('admin-indicator').classList.add('hidden');
     document.getElementById('spacer-nav').classList.remove('hidden');
+    resetForm();
     renderGrid();
+    setTimeout(() => lucide.createIcons(), 100);
+    alert("✅ Logout berhasil!");
 };
 
 window.resetForm = () => {
     isEditing = false;
     document.getElementById('product-form').reset();
     document.getElementById('edit-id').value = '';
-    document.getElementById('btn-submit').innerText = 'Simpan Produk';
+    document.getElementById('btn-submit').innerText = 'Simpan Data';
     document.getElementById('form-label').innerHTML =
         '<i data-lucide="settings" class="text-purple-500"></i> Kelola Produk';
-    lucide.createIcons();
+    setTimeout(() => lucide.createIcons(), 100);
 };
 
 window.startEdit = (id) => {
@@ -368,9 +437,9 @@ window.startEdit = (id) => {
 
     isEditing = true;
     document.getElementById('edit-id').value = p.id;
-    document.getElementById('in-title').value = p.title;
-    document.getElementById('in-desc').value = p.description;
-    document.getElementById('in-link').value = p.link;
+    document.getElementById('in-title').value = p.title || '';
+    document.getElementById('in-desc').value = p.description || '';
+    document.getElementById('in-link').value = p.link || '';
     document.getElementById('in-image').value = p.image || '';
     document.getElementById('in-order').value = p.sortOrder || 0;
 
@@ -378,30 +447,45 @@ window.startEdit = (id) => {
     document.getElementById('form-label').innerHTML =
         '<i data-lucide="edit-3" class="text-purple-500"></i> Edit Produk';
 
-    lucide.createIcons();
+    setTimeout(() => lucide.createIcons(), 100);
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 window.deleteProd = async (id) => {
+    if (!isAdmin) return;
+    
     if (confirm("Hapus produk ini?")) {
-        await deleteDoc(doc(db, 'products', id));
+        try {
+            await deleteDoc(doc(db, 'products', id));
+            alert("✅ Produk berhasil dihapus!");
+        } catch (err) {
+            console.error("Delete Error:", err);
+            alert("❌ Gagal menghapus: " + err.message);
+        }
     }
 };
 
 /* ===============================
-   GRID RENDER
+   GRID RENDER (DIPERBAIKI)
 ================================ */
 function renderGrid() {
     const grid = document.getElementById('product-grid');
     const empty = document.getElementById('empty-msg');
 
+    if (!grid || !empty) return;
+
     const filtered = allProducts
-        .filter(p => p.platform === currentPlatform)
-        .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+        .filter(p => p && p.platform === currentPlatform)
+        .sort((a, b) => {
+            const orderA = a.sortOrder || 999;
+            const orderB = b.sortOrder || 999;
+            return orderA - orderB;
+        });
 
     if (filtered.length === 0) {
         grid.innerHTML = '';
         empty.classList.remove('hidden');
+        setTimeout(() => lucide.createIcons(), 100);
         return;
     }
 
@@ -410,8 +494,10 @@ function renderGrid() {
     grid.innerHTML = filtered.map((p, i) => `
         <div class="group relative bg-neutral-900/40 rounded-[2rem] border border-white/5 overflow-hidden transition-all duration-500 hover:border-purple-500/30 hover:-translate-y-2">
             <div class="aspect-square bg-black relative overflow-hidden">
-                <img src="${p.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f'}"
-                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <img src="${p.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&auto=format'}" 
+                     alt="${p.title || 'Product'}"
+                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                     onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&auto=format'">
                 <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
                 <div class="absolute top-4 left-4 bg-black/60 px-3 py-1.5 rounded-full text-[9px] font-black border border-white/10 uppercase tracking-widest">
                     Urutan #${p.sortOrder || i + 1}
@@ -427,19 +513,82 @@ function renderGrid() {
                 </div>` : ''}
             </div>
             <div class="p-6">
-                <h4 class="text-lg font-bold uppercase tracking-tight mb-2 text-white">${p.title}</h4>
-                <p class="text-neutral-500 text-xs mb-6">${p.description || "Rekomendasi terbaik."}</p>
-                <a href="${p.link}" target="_blank"
+                <h4 class="text-lg font-bold uppercase tracking-tight mb-2 text-white line-clamp-2">${p.title || 'Produk'}</h4>
+                <p class="text-neutral-500 text-xs mb-6 line-clamp-2">${p.description || "Rekomendasi terbaik."}</p>
+                <a href="${p.link}" target="_blank" rel="noopener noreferrer"
                    class="w-full py-4 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase hover:bg-white hover:text-black transition-all text-center">
+                   <i data-lucide="external-link" class="w-3 h-3"></i>
                    Beli Produk
                 </a>
             </div>
         </div>
     `).join('');
 
-    lucide.createIcons();
+    // Render ulang ikon Lucide
+    setTimeout(() => {
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+            lucide.createIcons();
+        }
+    }, 50);
 }
 
+// Cleanup listener saat page unload
+window.addEventListener('beforeunload', () => {
+    if (unsubscribe) {
+        unsubscribe();
+    }
+});
+
+// Mulai aplikasi
 init();
-lucide.createIcons();
-    </script>
+
+// Inisialisasi ikon
+if (typeof lucide !== 'undefined') {
+    setTimeout(() => lucide.createIcons(), 100);
+}
+
+// Export fungsi ke global scope
+window.switchView = switchView;
+window.toggleLoginModal = toggleLoginModal;
+window.logoutAdmin = logoutAdmin;
+window.resetForm = resetForm;
+window.startEdit = startEdit;
+window.deleteProd = deleteProd;
+window.clearAllData = clearAllData;
+
+</script>
+
+<!-- Non-module fallback -->
+<script>
+// Fungsi global untuk menangani klik dari inline onclick
+window.switchView = function(view, platform) {
+    document.getElementById('landing-view')?.classList.add('hidden');
+    document.getElementById('showcase-view')?.classList.add('hidden');
+    
+    if (view === 'landing') {
+        document.getElementById('landing-view')?.classList.remove('hidden');
+    }
+};
+
+window.toggleLoginModal = function(show) {
+    const modal = document.getElementById('login-modal');
+    if (modal) {
+        modal.classList.toggle('hidden', !show);
+        if (show) modal.classList.add('flex');
+        else modal.classList.remove('flex');
+    }
+};
+
+window.logoutAdmin = function() {
+    window.isAdmin = false;
+    document.getElementById('admin-panel')?.classList.add('hidden');
+    document.getElementById('admin-indicator')?.classList.add('hidden');
+    document.getElementById('spacer-nav')?.classList.remove('hidden');
+};
+
+window.clearAllData = function() {
+    alert('Fungsi clear data hanya tersedia di mode module');
+};
+</script>
+</body>
+</html>
