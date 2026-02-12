@@ -63,8 +63,8 @@
             <div class="inline-flex p-1 rounded-full bg-white/5 border border-white/10 mb-6">
                 <span class="px-4 py-1 text-[9px] font-black tracking-[0.3em] uppercase text-purple-400">Rekomendasi Produk by Itsbad</span>
             </div>
-            <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 uppercase">ITS<span class="text-purple-600">BAD.</span></h1>
-            <p class="text-neutral-500 uppercase tracking-[0.5em] text-[9px] font-bold">Pilih Platform Hub</p>
+            <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4">ITS<span class="text-purple-600">BAD.</span></h1>
+            <p class="text-neutral-500 uppercase tracking-[0.5em] text-[9px] font-bold">Pilih Platform Rekomendasi</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
@@ -73,7 +73,7 @@
                     <i data-lucide="shopping-bag" class="text-white"></i>
                 </div>
                 <h3 class="text-3xl font-black italic uppercase mb-2">Shopee</h3>
-                <p class="text-neutral-500 text-xs mb-8 opacity-70">Lihat rekomendasi Shopee.</p>
+                <p class="text-neutral-500 text-xs mb-8 opacity-70">Produk rekomendasi di Shopee.</p>
                 <div class="flex items-center gap-2 text-[10px] font-black uppercase text-purple-500">Explore <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
             </button>
             <button onclick="switchView('showcase', 'tiktok')" class="platform-card group relative bg-neutral-900/30 border border-white/5 p-10 rounded-[2.5rem] text-left transition-all duration-500 shadow-2xl">
@@ -81,7 +81,7 @@
                     <i data-lucide="video" class="text-white"></i>
                 </div>
                 <h3 class="text-3xl font-black italic uppercase mb-2">TikTok</h3>
-                <p class="text-neutral-500 text-xs mb-8 opacity-70">Lihat rekomendasi TikTok.</p>
+                <p class="text-neutral-500 text-xs mb-8 opacity-70">Produk rekomendasi di TikTok Shop.</p>
                 <div class="flex items-center gap-2 text-[10px] font-black uppercase text-purple-500">Explore <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
             </button>
             <button onclick="switchView('showcase', 'tokopedia')" class="platform-card group relative bg-neutral-900/30 border border-white/5 p-10 rounded-[2.5rem] text-left transition-all duration-500 shadow-2xl">
@@ -89,11 +89,12 @@
                     <i data-lucide="store" class="text-white"></i>
                 </div>
                 <h3 class="text-3xl font-black italic uppercase mb-2">Tokopedia</h3>
-                <p class="text-neutral-500 text-xs mb-8 opacity-70">Lihat rekomendasi Tokopedia.</p>
+                <p class="text-neutral-500 text-xs mb-8 opacity-70">Produk rekomendasi di Tokopedia.</p>
                 <div class="flex items-center gap-2 text-[10px] font-black uppercase text-purple-500">Explore <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
             </button>
         </div>
 
+        <!-- Tombol Admin Tersembunyi -->
         <button onclick="toggleLoginModal(true)" class="mt-20 opacity-0 hover:opacity-10 transition-opacity">
             <i data-lucide="lock" class="w-4 h-4"></i>
         </button>
@@ -107,7 +108,7 @@
                     <i data-lucide="chevron-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>
                     <span class="text-[10px] font-black uppercase tracking-widest">Kembali</span>
                 </button>
-                <h2 id="platform-title-nav" class="text-lg font-black italic uppercase tracking-tighter text-white">HUB</h2>
+                <h2 id="platform-title-nav" class="text-lg font-black italic uppercase tracking-tighter">PLATFORM HUB</h2>
                 <div id="admin-indicator" class="hidden">
                     <button onclick="logoutAdmin()" class="text-red-500"><i data-lucide="log-out" class="w-5 h-5"></i></button>
                 </div>
@@ -118,34 +119,32 @@
         <main class="max-w-7xl mx-auto px-6 py-12">
             <!-- Form Admin -->
             <div id="admin-panel" class="hidden mb-12 bg-neutral-900 border border-purple-500/20 rounded-[2rem] p-8 shadow-2xl">
-                <div class="flex justify-between items-center mb-8">
+                <div class="flex justify-between items-center mb-6">
                     <h3 id="form-label" class="text-xl font-black italic uppercase flex items-center gap-2">
                         <i data-lucide="settings" class="text-purple-500"></i> Kelola Produk
                     </h3>
-                    <div class="flex gap-2">
-                         <button onclick="clearAllData()" class="text-[9px] font-black uppercase bg-red-600/20 text-red-500 border border-red-500/30 px-4 py-2 rounded-full hover:bg-red-600 hover:text-white transition-all">
-                             Hapus Semua
-                         </button>
-                    </div>
+                    <button onclick="clearAllData()" class="text-[9px] font-black uppercase bg-red-600/20 text-red-500 border border-red-500/30 px-4 py-2 rounded-full hover:bg-red-600 hover:text-white transition-all">
+                        Hapus Semua Data
+                    </button>
                 </div>
                 <form id="product-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <input type="hidden" id="edit-id">
                     <div class="space-y-4">
-                        <input id="in-title" required placeholder="Judul Produk" class="w-full rounded-xl px-5 py-3 outline-none">
-                        <input id="in-link" required type="url" placeholder="Link Produk (https://...)" class="w-full rounded-xl px-5 py-3 outline-none text-sm">
-                        <textarea id="in-desc" placeholder="Deskripsi..." class="w-full rounded-xl px-5 py-3 h-24 resize-none outline-none text-sm"></textarea>
+                        <input id="in-title" required placeholder="Judul Produk" class="w-full rounded-xl px-5 py-3">
+                        <input id="in-link" required type="url" placeholder="Link Produk (https://...)" class="w-full rounded-xl px-5 py-3 text-sm">
+                        <textarea id="in-desc" placeholder="Deskripsi..." class="w-full rounded-xl px-5 py-3 h-24 resize-none text-sm"></textarea>
                     </div>
                     <div class="space-y-4">
                         <div class="flex gap-2">
-                            <input id="in-image" placeholder="URL Gambar" class="flex-1 rounded-xl px-5 py-3 outline-none text-xs">
+                            <input id="in-image" placeholder="URL Gambar" class="flex-1 rounded-xl px-5 py-3 text-xs">
                             <label class="bg-neutral-800 p-3 rounded-xl cursor-pointer hover:bg-neutral-700">
                                 <i data-lucide="image" class="w-5 h-5"></i>
                                 <input type="file" id="file-input" class="hidden" accept="image/*">
                             </label>
                         </div>
-                        <input id="in-order" type="number" required placeholder="Urutan (Contoh: 1, 2, 3)" class="w-full rounded-xl px-5 py-3 outline-none">
+                        <input id="in-order" type="number" required placeholder="Urutan Manual (1, 2, 3...)" class="w-full rounded-xl px-5 py-3">
                         <button type="submit" id="btn-submit" class="w-full bg-white text-black font-black py-4 rounded-xl hover:bg-purple-600 hover:text-white transition-all uppercase tracking-widest text-xs">
-                            Simpan Ke Database
+                            Simpan Data
                         </button>
                     </div>
                 </form>
@@ -155,7 +154,7 @@
             
             <div id="empty-msg" class="hidden py-40 text-center text-neutral-600">
                 <i data-lucide="package" class="w-12 h-12 mx-auto mb-4 opacity-10"></i>
-                <p class="text-xs font-bold uppercase tracking-widest">Katalog Produk Kosong.</p>
+                <p class="text-xs font-bold uppercase tracking-widest">Katalog Kosong.</p>
             </div>
         </main>
     </div>
@@ -167,25 +166,25 @@
                 <div class="w-16 h-16 bg-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center rotate-12">
                     <i data-lucide="lock" class="text-white w-8 h-8"></i>
                 </div>
-                <h3 class="text-3xl font-black italic uppercase tracking-tighter">Admin Portal</h3>
+                <h3 class="text-3xl font-black italic">ADMIN PORTAL</h3>
             </div>
             <form id="login-form" class="space-y-4">
                 <input id="login-pass" type="password" placeholder="••••••" class="w-full bg-neutral-900 border border-white/10 rounded-2xl px-6 py-5 text-center text-3xl tracking-[0.8em] outline-none">
                 <div class="flex gap-4">
                     <button type="button" onclick="toggleLoginModal(false)" class="flex-1 py-4 bg-neutral-800 rounded-xl font-bold text-[10px] uppercase">Batal</button>
-                    <button type="submit" class="flex-[2] py-4 bg-white text-black rounded-xl font-black text-[10px] uppercase hover:bg-purple-600 hover:text-white transition-all">Verifikasi</button>
+                    <button type="submit" class="flex-[2] py-4 bg-white text-black rounded-xl font-black text-[10px] uppercase hover:bg-purple-600 hover:text-white transition-all">Masuk</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Firebase SDK v11 -->
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Konfigurasi dari User
+        // Konfigurasi Langsung (Sesuai Permintaan)
         const firebaseConfig = {
             apiKey: "AIzaSyCKX6uS1motUTc5EGX1PnB9c9nHiu00438",
             authDomain: "showcase-itsbad.firebaseapp.com",
@@ -196,36 +195,32 @@
             measurementId: "G-3TLH4LEGN7"
         };
 
-        const appId = "itsbad-prod-v2";
         let db, auth, user;
         let isAdmin = false;
         let allProducts = [];
         let currentPlatform = null;
         let isEditing = false;
 
-        // PATH STRUKTUR MANDATORY (Rule 1)
-        const getColPath = () => collection(db, 'artifacts', appId, 'public', 'data', 'products');
-
+        // Inisialisasi Firebase
         async function init() {
             try {
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
 
-                // RULE 3: Login Anonymous harus aktif di Firebase Console
-                const cred = await signInAnonymously(auth);
-                user = cred.user;
+                // Masuk Secara Anonim
+                await signInAnonymously(auth);
 
                 onAuthStateChanged(auth, (u) => {
+                    user = u;
                     if (u) {
-                        user = u;
                         hideLoader();
                         setupRealtimeData();
                     }
                 });
             } catch (err) {
-                console.error("Firebase Connection Error:", err);
-                alert("DATABASE ERROR: Pastikan Anonymous Auth Aktif di Firebase Console.\nDetail: " + err.message);
+                console.error("Firebase Init Error:", err);
+                alert("Database tidak terdeteksi. Pastikan Anonymous Auth aktif di Firebase Console.");
                 hideLoader();
             }
         }
@@ -239,27 +234,20 @@
             }, 500);
         }
 
+        // Listener Realtime ke Koleksi "products" di Root
         function setupRealtimeData() {
             if (!user) return;
-            // Real-time listener
-            onSnapshot(getColPath(), (snapshot) => {
+            const colRef = collection(db, 'products');
+            onSnapshot(colRef, (snapshot) => {
                 allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
                 if (currentPlatform) renderGrid();
-            }, (err) => {
-                console.error("Firestore Listen Error:", err);
-                if (err.code === 'permission-denied') {
-                    alert("Firestore Error: Izin ditolak. Pastikan Rules Firestore disetel ke 'allow read, write: if true;'");
-                }
-            });
+            }, (err) => console.error("Firestore Error:", err));
         }
 
-        // Action: CRUD
+        // CRUD: Simpan Produk
         document.getElementById('product-form').onsubmit = async (e) => {
             e.preventDefault();
-            if (!isAdmin || !user) {
-                alert("Error: Anda belum terverifikasi sebagai admin.");
-                return;
-            }
+            if (!isAdmin || !user) return;
 
             const payload = {
                 title: document.getElementById('in-title').value,
@@ -272,37 +260,39 @@
             };
 
             try {
+                const colRef = collection(db, 'products');
                 if (isEditing) {
                     const id = document.getElementById('edit-id').value;
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', id);
-                    await updateDoc(docRef, payload);
+                    await updateDoc(doc(db, 'products', id), payload);
+                    alert("Produk diperbarui!");
                 } else {
-                    await addDoc(getColPath(), payload);
+                    await addDoc(colRef, payload);
+                    alert("Produk ditambahkan!");
                 }
                 resetForm();
-                alert("Berhasil disimpan!");
             } catch (err) {
                 console.error("Save Error:", err);
-                alert("GAGAL SIMPAN: " + err.message + "\nPeriksa aturan Firestore Rules Anda.");
+                alert("Gagal simpan: " + err.message);
             }
         };
 
+        // CRUD: Hapus Semua
         window.clearAllData = async () => {
             if (!isAdmin) return;
-            if (confirm("Hapus seluruh riwayat produk?")) {
+            if (confirm("Hapus seluruh produk dari database?")) {
                 try {
-                    const snapshot = await getDocs(getColPath());
+                    const snapshot = await getDocs(collection(db, 'products'));
                     const batch = writeBatch(db);
                     snapshot.docs.forEach((d) => {
-                        batch.delete(doc(db, 'artifacts', appId, 'public', 'data', 'products', d.id));
+                        batch.delete(doc(db, 'products', d.id));
                     });
                     await batch.commit();
                     alert("Database dibersihkan.");
-                } catch (err) { alert("Gagal hapus: " + err.message); }
+                } catch (err) { alert("Error: " + err.message); }
             }
         };
 
-        // Navigation & UI
+        // Navigation
         window.switchView = (view, platform = null) => {
             document.getElementById('landing-view').classList.add('hidden');
             document.getElementById('showcase-view').classList.add('hidden');
@@ -353,7 +343,7 @@
             isEditing = false;
             document.getElementById('product-form').reset();
             document.getElementById('edit-id').value = '';
-            document.getElementById('btn-submit').innerText = 'Simpan Ke Database';
+            document.getElementById('btn-submit').innerText = 'Simpan Produk';
             document.getElementById('form-label').innerHTML = '<i data-lucide="settings" class="text-purple-500"></i> Kelola Produk';
             lucide.createIcons();
         };
@@ -369,7 +359,7 @@
             document.getElementById('in-image').value = p.image || '';
             document.getElementById('in-order').value = p.sortOrder || 0;
             
-            document.getElementById('btn-submit').innerText = 'Update Perubahan';
+            document.getElementById('btn-submit').innerText = 'Update Produk';
             document.getElementById('form-label').innerHTML = '<i data-lucide="edit-3" class="text-purple-500"></i> Edit Produk';
             lucide.createIcons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -378,15 +368,15 @@
         window.deleteProd = async (id) => {
             if (confirm("Hapus produk ini?")) {
                 try {
-                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', id));
-                } catch (e) { alert("Gagal hapus: " + e.message); }
+                    await deleteDoc(doc(db, 'products', id));
+                } catch (e) { alert("Error: " + e.message); }
             }
         };
 
         document.getElementById('file-input').onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                if (file.size > 900000) { alert("Gambar terlalu besar (Maks 900KB)."); return; }
+                if (file.size > 1000000) { alert("Maksimal 1MB."); return; }
                 const reader = new FileReader();
                 reader.onload = () => document.getElementById('in-image').value = reader.result;
                 reader.readAsDataURL(file);
@@ -409,12 +399,12 @@
 
             empty.classList.add('hidden');
             grid.innerHTML = filtered.map((p, i) => `
-                <div class="group relative bg-neutral-900/40 rounded-[2rem] border border-white/5 overflow-hidden transition-all duration-500 hover:border-purple-500/30 hover:-translate-y-2 fade-in">
+                <div class="group relative bg-neutral-900/40 rounded-[2rem] border border-white/5 overflow-hidden transition-all duration-500 hover:border-purple-500/30 hover:-translate-y-2">
                     <div class="aspect-square bg-black relative overflow-hidden">
                         <img src="${p.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c'">
                         <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
                         <div class="absolute top-4 left-4 bg-black/60 px-3 py-1.5 rounded-full text-[9px] font-black border border-white/10 uppercase tracking-widest">
-                            #${p.sortOrder || i + 1}
+                            Urutan #${p.sortOrder || i + 1}
                         </div>
                         ${isAdmin ? `
                             <div class="absolute top-4 right-4 flex gap-2">
@@ -424,10 +414,10 @@
                         ` : ''}
                     </div>
                     <div class="p-6">
-                        <h4 class="text-lg font-bold uppercase tracking-tight mb-2 line-clamp-1 group-hover:text-purple-400 transition-colors">${p.title}</h4>
-                        <p class="text-neutral-500 text-xs line-clamp-2 mb-6 font-medium leading-relaxed">${p.description || "Pilihan produk Itsbad."}</p>
+                        <h4 class="text-lg font-bold uppercase tracking-tight mb-2 line-clamp-1 group-hover:text-purple-400 transition-colors text-white">${p.title}</h4>
+                        <p class="text-neutral-500 text-xs line-clamp-2 mb-6 font-medium leading-relaxed">${p.description || "Rekomendasi terbaik."}</p>
                         <a href="${p.link}" target="_blank" class="w-full py-4 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase hover:bg-white hover:text-black transition-all text-center">
-                            Dapatkan Produk <i data-lucide="external-link" class="w-3 h-3"></i>
+                            Beli Produk <i data-lucide="external-link" class="w-3 h-3"></i>
                         </a>
                     </div>
                 </div>
@@ -435,10 +425,11 @@
             lucide.createIcons();
         }
 
+        // Inisialisasi Aplikasi
         init();
         lucide.createIcons();
 
-        // Export window functions
+        // Global functions for HTML
         window.switchView = switchView;
         window.toggleLoginModal = toggleLoginModal;
         window.logoutAdmin = logoutAdmin;
