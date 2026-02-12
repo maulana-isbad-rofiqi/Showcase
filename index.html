@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itsbad Showcase - Rekomendasi produk</title>
+    <title>Itsbad Showcase - Rekomendasi Produk</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -15,12 +15,6 @@
             background-color: #050505;
             color: white;
             overflow-x: hidden;
-        }
-
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .fade-in { animation: fadeIn 0.6s ease-out forwards; }
@@ -35,8 +29,8 @@
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 
         .platform-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+            border-color: rgba(147, 51, 234, 0.3);
             background: rgba(255, 255, 255, 0.05);
         }
 
@@ -45,11 +39,15 @@
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
             color: white !important;
         }
+        input:focus, textarea:focus {
+            border-color: #9333ea !important;
+            outline: none;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Latar Belakang Estetik -->
+    <!-- Latar Belakang -->
     <div class="fixed inset-0 pointer-events-none z-[-1]">
         <div class="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-purple-900/10 blur-[150px] rounded-full"></div>
         <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-900/10 blur-[150px] rounded-full"></div>
@@ -58,56 +56,54 @@
     <!-- Loader -->
     <div id="main-loader" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p class="text-[10px] font-bold tracking-[0.3em] uppercase opacity-50">Menyambungkan ke Itsbad Hub...</p>
+        <p class="text-[10px] font-bold tracking-[0.3em] uppercase opacity-50">Menghubungkan Database...</p>
     </div>
 
-    <!-- Halaman Utama (Landing) -->
+    <!-- View: Landing -->
     <div id="landing-view" class="hidden min-h-screen flex flex-col items-center justify-center px-6 py-12 fade-in">
         <div class="text-center mb-16">
             <div class="inline-flex p-1 rounded-full bg-white/5 border border-white/10 mb-6">
-                <span class="px-4 py-1 text-[9px] font-black tracking-[0.3em] uppercase text-purple-400">Rekomendasi produk by itsbad</span>
+                <span class="px-4 py-1 text-[9px] font-black tracking-[0.3em] uppercase text-purple-400">Rekomendasi Produk by Itsbad</span>
             </div>
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4">ITS<span class="text-purple-600">BAD.</span></h1>
-            <p class="text-neutral-500 uppercase tracking-[0.5em] text-[9px] font-bold">Pilih Platform Untuk Eksplorasi</p>
+            <p class="text-neutral-500 uppercase tracking-[0.5em] text-[9px] font-bold">Pilih Platform Rekomendasi</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
-            <!-- Shopee -->
             <button onclick="switchView('showcase', 'shopee')" class="platform-card group relative bg-neutral-900/30 border border-white/5 p-10 rounded-[2.5rem] text-left transition-all duration-500 shadow-2xl">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center mb-6 shadow-lg shadow-orange-500/20 group-hover:scale-110 transition-transform">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
                     <i data-lucide="shopping-bag" class="text-white"></i>
                 </div>
                 <h3 class="text-3xl font-black italic uppercase mb-2">Shopee</h3>
-                <p class="text-neutral-500 text-xs mb-8 opacity-70">Lihat koleksi di Shopee.</p>
+                <p class="text-neutral-500 text-xs mb-8 opacity-70">Produk rekomendasi di Shopee.</p>
                 <div class="flex items-center gap-2 text-[10px] font-black uppercase text-purple-500">Explore <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
             </button>
-            <!-- TikTok -->
+
             <button onclick="switchView('showcase', 'tiktok')" class="platform-card group relative bg-neutral-900/30 border border-white/5 p-10 rounded-[2.5rem] text-left transition-all duration-500 shadow-2xl">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-pink-500/20 group-hover:scale-110 transition-transform">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
                     <i data-lucide="video" class="text-white"></i>
                 </div>
                 <h3 class="text-3xl font-black italic uppercase mb-2">TikTok</h3>
-                <p class="text-neutral-500 text-xs mb-8 opacity-70">Lihat koleksi di TikTok Shop.</p>
+                <p class="text-neutral-500 text-xs mb-8 opacity-70">Produk rekomendasi di TikTok Shop.</p>
                 <div class="flex items-center gap-2 text-[10px] font-black uppercase text-purple-500">Explore <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
             </button>
-            <!-- Tokopedia -->
+
             <button onclick="switchView('showcase', 'tokopedia')" class="platform-card group relative bg-neutral-900/30 border border-white/5 p-10 rounded-[2.5rem] text-left transition-all duration-500 shadow-2xl">
-                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-6 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
                     <i data-lucide="store" class="text-white"></i>
                 </div>
                 <h3 class="text-3xl font-black italic uppercase mb-2">Tokopedia</h3>
-                <p class="text-neutral-500 text-xs mb-8 opacity-70">Lihat Koleksi di Tokopedia.</p>
+                <p class="text-neutral-500 text-xs mb-8 opacity-70">Produk rekomendasi di Tokopedia.</p>
                 <div class="flex items-center gap-2 text-[10px] font-black uppercase text-purple-500">Explore <i data-lucide="arrow-right" class="w-3 h-3"></i></div>
             </button>
         </div>
 
-        <!-- Hidden Admin Trigger -->
         <button onclick="toggleLoginModal(true)" class="mt-20 opacity-0 hover:opacity-10 transition-opacity">
             <i data-lucide="lock" class="w-4 h-4"></i>
         </button>
     </div>
 
-    <!-- Halaman Produk (Showcase) -->
+    <!-- View: Showcase -->
     <div id="showcase-view" class="hidden min-h-screen pb-20 fade-in">
         <nav class="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5 px-6 py-4">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
@@ -115,9 +111,7 @@
                     <i data-lucide="chevron-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>
                     <span class="text-[10px] font-black uppercase tracking-widest">Kembali</span>
                 </button>
-                <div class="flex items-center gap-2">
-                    <h2 id="platform-title-nav" class="text-lg font-black italic uppercase tracking-tighter">PLATFORM HUB</h2>
-                </div>
+                <h2 id="platform-title-nav" class="text-lg font-black italic uppercase tracking-tighter">PLATFORM HUB</h2>
                 <div id="admin-indicator" class="hidden">
                     <button onclick="logoutAdmin()" class="text-red-500"><i data-lucide="log-out" class="w-5 h-5"></i></button>
                 </div>
@@ -126,100 +120,104 @@
         </nav>
 
         <main class="max-w-7xl mx-auto px-6 py-12">
-            <!-- Form Admin -->
+            <!-- Form Admin (Hanya terlihat jika isAdmin = true) -->
             <div id="admin-panel" class="hidden mb-12 bg-neutral-900 border border-purple-500/20 rounded-[2rem] p-8 shadow-2xl">
-                <h3 id="form-title" class="text-xl font-black italic uppercase mb-6 flex items-center gap-2">
+                <h3 id="form-label" class="text-xl font-black italic uppercase mb-6 flex items-center gap-2">
                     <i data-lucide="settings" class="text-purple-500"></i> Kelola Produk
                 </h3>
                 <form id="product-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <input type="hidden" id="edit-id">
                     <div class="space-y-4">
-                        <input id="in-title" required placeholder="Judul Produk" class="w-full rounded-xl px-5 py-3 outline-none">
-                        <input id="in-link" required type="url" placeholder="Link Produk (https://...)" class="w-full rounded-xl px-5 py-3 outline-none text-sm">
-                        <textarea id="in-desc" placeholder="Deskripsi..." class="w-full rounded-xl px-5 py-3 h-24 resize-none outline-none text-sm"></textarea>
+                        <input id="in-title" required placeholder="Judul Produk" class="w-full rounded-xl px-5 py-3">
+                        <input id="in-link" required type="url" placeholder="Link Produk (https://...)" class="w-full rounded-xl px-5 py-3 text-sm">
+                        <textarea id="in-desc" placeholder="Deskripsi..." class="w-full rounded-xl px-5 py-3 h-24 resize-none text-sm"></textarea>
                     </div>
                     <div class="space-y-4">
                         <div class="flex gap-2">
-                            <input id="in-image" placeholder="Link Gambar" class="flex-1 rounded-xl px-5 py-3 outline-none text-xs">
+                            <input id="in-image" placeholder="URL Gambar" class="flex-1 rounded-xl px-5 py-3 text-xs">
                             <label class="bg-neutral-800 p-3 rounded-xl cursor-pointer hover:bg-neutral-700">
                                 <i data-lucide="image" class="w-5 h-5"></i>
                                 <input type="file" id="file-input" class="hidden" accept="image/*">
                             </label>
                         </div>
-                        <input id="in-order" type="number" placeholder="Rank (0 = AI Urutkan)" class="w-full rounded-xl px-5 py-3 outline-none">
+                        <input id="in-order" type="number" placeholder="Urutan (0 = AI Urutkan)" class="w-full rounded-xl px-5 py-3">
                         <button type="submit" id="btn-submit" class="w-full bg-white text-black font-black py-4 rounded-xl hover:bg-purple-600 hover:text-white transition-all uppercase tracking-widest text-xs">
-                            Simpan Produk
+                            Simpan Data
                         </button>
-                        <div id="ai-status" class="hidden text-center text-[10px] text-purple-400 font-bold animate-pulse">AI sedang menganalisis urutan...</div>
+                        <div id="ai-status" class="hidden text-center text-[10px] text-purple-400 font-bold animate-pulse uppercase tracking-widest">Gemini AI sedang menganalisis urutan...</div>
                     </div>
                 </form>
             </div>
 
-            <!-- Grid Produk -->
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
             
             <div id="empty-msg" class="hidden py-40 text-center text-neutral-600">
                 <i data-lucide="package" class="w-12 h-12 mx-auto mb-4 opacity-10"></i>
-                <p class="text-xs font-bold uppercase tracking-widest">Belum ada produk di platform ini.</p>
+                <p class="text-xs font-bold uppercase tracking-widest">Katalog Kosong.</p>
             </div>
         </main>
     </div>
 
-    <!-- Login Modal -->
+    <!-- Modal Login -->
     <div id="login-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/95 backdrop-blur-xl p-6">
         <div class="w-full max-w-sm fade-in">
             <div class="text-center mb-10">
                 <div class="w-16 h-16 bg-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center rotate-12">
                     <i data-lucide="lock" class="text-white w-8 h-8"></i>
                 </div>
-                <h3 class="text-3xl font-black italic">ADMIN LOGIN</h3>
+                <h3 class="text-3xl font-black italic">ADMIN PORTAL</h3>
             </div>
             <form id="login-form" class="space-y-4">
                 <input id="login-pass" type="password" placeholder="••••••" class="w-full bg-neutral-900 border border-white/10 rounded-2xl px-6 py-5 text-center text-3xl tracking-[0.8em] outline-none">
                 <div class="flex gap-4">
                     <button type="button" onclick="toggleLoginModal(false)" class="flex-1 py-4 bg-neutral-800 rounded-xl font-bold text-[10px] uppercase">Batal</button>
-                    <button type="submit" class="flex-[2] py-4 bg-white text-black rounded-xl font-black text-[10px] uppercase hover:bg-purple-600 hover:text-white transition-all">Verifikasi</button>
+                    <button type="submit" class="flex-[2] py-4 bg-white text-black rounded-xl font-black text-[10px] uppercase hover:bg-purple-600 hover:text-white transition-all">Masuk</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global State & Config
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        // Global Variables from environment
+        const firebaseConfig = JSON.parse(__firebase_config);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'itsbad-v5-default';
-        const apiKey = ""; 
+        const apiKey = ""; // Gemini API Key
 
-        let db, auth;
+        let db, auth, user;
         let isAdmin = false;
         let allProducts = [];
         let currentPlatform = null;
         let isEditing = false;
 
-        // Inisialisasi
+        // --- INIT FIREBASE & AUTH ---
         async function init() {
             try {
-                if (!firebaseConfig.apiKey) throw new Error("Config Empty");
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
 
-                await signInAnonymously(auth);
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
+                // RULE 3: Auth Before Queries
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (u) => {
+                    user = u;
+                    if (u) {
                         hideLoader();
                         setupRealtimeData();
                     }
                 });
             } catch (err) {
-                console.error("Init Error:", err);
-                // Jika error, paksa loader hilang agar tampilan tetap ada
-                setTimeout(hideLoader, 2000);
+                console.error("Firebase Init Error:", err);
+                setTimeout(hideLoader, 2000); // Fail-safe
             }
         }
 
@@ -232,26 +230,26 @@
             }, 500);
         }
 
+        // --- FIRESTORE OPERATIONS ---
         function setupRealtimeData() {
+            if (!user) return;
             const q = collection(db, 'artifacts', appId, 'public', 'data', 'products');
             onSnapshot(q, (snapshot) => {
                 allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
                 if (currentPlatform) renderGrid();
-            }, (err) => console.error("Firestore Error:", err));
+            }, (err) => console.error("Firestore Listen Error:", err));
         }
 
-        // Navigation
+        // --- ACTIONS ---
         window.switchView = (view, platform = null) => {
-            const landing = document.getElementById('landing-view');
-            const showcase = document.getElementById('showcase-view');
+            document.getElementById('landing-view').classList.add('hidden');
+            document.getElementById('showcase-view').classList.add('hidden');
 
             if (view === 'landing') {
-                landing.classList.remove('hidden');
-                showcase.classList.add('hidden');
+                document.getElementById('landing-view').classList.remove('hidden');
                 currentPlatform = null;
             } else {
-                landing.classList.add('hidden');
-                showcase.classList.remove('hidden');
+                document.getElementById('showcase-view').classList.remove('hidden');
                 currentPlatform = platform;
                 document.getElementById('platform-title-nav').innerText = platform.toUpperCase() + " HUB";
                 renderGrid();
@@ -260,7 +258,6 @@
             lucide.createIcons();
         };
 
-        // Admin Management
         window.toggleLoginModal = (show) => {
             const modal = document.getElementById('login-modal');
             modal.classList.toggle('hidden', !show);
@@ -290,26 +287,21 @@
             renderGrid();
         };
 
-        // Form Logic
-        document.getElementById('file-input').onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = () => document.getElementById('in-image').value = reader.result;
-                reader.readAsDataURL(file);
-            }
-        };
-
+        // --- PRODUCT FORM HANDLER ---
         document.getElementById('product-form').onsubmit = async (e) => {
             e.preventDefault();
-            if (!isAdmin) return;
+            if (!isAdmin || !user) {
+                alert("Sesi tidak valid. Pastikan Anda login admin.");
+                return;
+            }
 
             const title = document.getElementById('in-title').value;
             const desc = document.getElementById('in-desc').value;
-            let order = parseInt(document.getElementById('in-order').value);
             const link = document.getElementById('in-link').value;
             const image = document.getElementById('in-image').value;
+            let order = parseInt(document.getElementById('in-order').value);
 
+            // Handle AI Ordering
             if (order === 0 || isNaN(order)) {
                 document.getElementById('ai-status').classList.remove('hidden');
                 order = await callGeminiAI(title, desc);
@@ -317,44 +309,72 @@
             }
 
             const payload = {
-                title, description: desc, sortOrder: order, link, image,
+                title, 
+                description: desc, 
+                sortOrder: order, 
+                link, 
+                image,
                 platform: currentPlatform,
-                updatedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString(),
+                authorUid: user.uid
             };
 
             try {
+                // RULE 1: Specific Paths
+                const collectionPath = collection(db, 'artifacts', appId, 'public', 'data', 'products');
+                
                 if (isEditing) {
                     const id = document.getElementById('edit-id').value;
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', id), payload);
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', id);
+                    await updateDoc(docRef, payload);
                 } else {
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'products'), payload);
+                    await addDoc(collectionPath, payload);
                 }
+                
                 resetForm();
-            } catch (err) { alert("Gagal menyimpan data."); }
+            } catch (err) { 
+                console.error("Save Error:", err);
+                alert("Gagal menyimpan data: " + err.message); 
+            }
         };
 
+        // --- GEMINI AI WITH BACKOFF ---
         async function callGeminiAI(title, desc) {
-            try {
-                const prompt = `Analisis produk: "${title}". Deskripsi: "${desc}". Berikan skor prioritas urutan (1-100) dimana 1 adalah paling prioritas/aesthetic. Kembalikan hanya JSON: {"score": number}`;
-                const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { responseMimeType: "application/json" }
-                    })
-                });
-                const res = await resp.json();
-                const aiData = JSON.parse(res.candidates[0].content.parts[0].text);
-                return aiData.score || 50;
-            } catch (e) { return 50; }
+            const maxRetries = 5;
+            const systemPrompt = "Analisis produk. Berikan skor urutan (1-100) dimana 1 adalah paling prioritas/aesthetic. Kembalikan JSON: {\"score\": number}";
+            const userQuery = `Produk: "${title}", Deskripsi: "${desc}"`;
+
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: userQuery }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] },
+                            generationConfig: { responseMimeType: "application/json" }
+                        })
+                    });
+                    
+                    if (!resp.ok) throw new Error("API Error");
+                    const res = await resp.json();
+                    const aiData = JSON.parse(res.candidates[0].content.parts[0].text);
+                    return aiData.score || 50;
+                } catch (e) {
+                    if (i === maxRetries - 1) return 50;
+                    await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
+                }
+            }
+            return 50;
         }
 
         window.resetForm = () => {
             isEditing = false;
             document.getElementById('product-form').reset();
             document.getElementById('edit-id').value = '';
-            document.getElementById('btn-submit').innerText = 'Simpan Produk';
+            document.getElementById('btn-submit').innerText = 'Simpan Data';
+            document.getElementById('form-label').innerHTML = '<i data-lucide="settings" class="text-purple-500"></i> Kelola Produk';
+            lucide.createIcons();
         };
 
         window.startEdit = (id) => {
@@ -367,21 +387,40 @@
             document.getElementById('in-link').value = p.link;
             document.getElementById('in-image').value = p.image || '';
             document.getElementById('in-order').value = p.sortOrder;
+            
             document.getElementById('btn-submit').innerText = 'Update Produk';
+            document.getElementById('form-label').innerHTML = '<i data-lucide="edit-3" class="text-purple-500"></i> Edit Produk';
+            
+            lucide.createIcons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.deleteProd = async (id) => {
+            if (!user) return;
             if (confirm("Hapus produk ini?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', id));
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', id);
+                    await deleteDoc(docRef);
+                } catch (e) { alert("Gagal menghapus: " + e.message); }
             }
         };
 
-        // Render Logic
+        // File Input Handler
+        document.getElementById('file-input').onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = () => document.getElementById('in-image').value = reader.result;
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // --- GRID RENDERING ---
         function renderGrid() {
             const grid = document.getElementById('product-grid');
             const empty = document.getElementById('empty-msg');
             
+            // Sort by manual order or AI score
             const filtered = allProducts
                 .filter(p => p.platform === currentPlatform)
                 .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
@@ -396,10 +435,10 @@
             grid.innerHTML = filtered.map((p, i) => `
                 <div class="group relative bg-neutral-900/40 rounded-[2rem] border border-white/5 overflow-hidden transition-all duration-500 hover:border-purple-500/30 hover:-translate-y-2">
                     <div class="aspect-square bg-black relative overflow-hidden">
-                        <img src="${p.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <img src="${p.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c'">
                         <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
                         <div class="absolute top-4 left-4 bg-black/60 px-3 py-1.5 rounded-full text-[9px] font-black border border-white/10 uppercase tracking-widest">
-                            Rank #${i + 1}
+                            Urutan #${i + 1}
                         </div>
                         ${isAdmin ? `
                             <div class="absolute top-4 right-4 flex gap-2">
@@ -410,15 +449,23 @@
                     </div>
                     <div class="p-6">
                         <h4 class="text-lg font-bold uppercase tracking-tight mb-2 line-clamp-1 group-hover:text-purple-400 transition-colors">${p.title}</h4>
-                        <p class="text-neutral-500 text-xs line-clamp-2 mb-6 font-medium leading-relaxed">${p.description || "No description."}</p>
+                        <p class="text-neutral-500 text-xs line-clamp-2 mb-6 font-medium leading-relaxed">${p.description || "Tidak ada deskripsi."}</p>
                         <a href="${p.link}" target="_blank" class="w-full py-4 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase hover:bg-white hover:text-black transition-all">
-                            Dapatkan <i data-lucide="external-link" class="w-3 h-3"></i>
+                            Beli Produk <i data-lucide="external-link" class="w-3 h-3"></i>
                         </a>
                     </div>
                 </div>
             `).join('');
             lucide.createIcons();
         }
+
+        // --- GLOBAL EXPORTS ---
+        window.switchView = switchView;
+        window.toggleLoginModal = toggleLoginModal;
+        window.logoutAdmin = logoutAdmin;
+        window.startEdit = startEdit;
+        window.deleteProd = deleteProd;
+        window.resetForm = resetForm;
 
         init();
         lucide.createIcons();
