@@ -1,9 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Itsbad Showcase - Rekomendasi Produk</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #050505;
+    color: white;
+    overflow-x: hidden;
+}
+
+.fade-in { animation: fadeIn 0.6s ease-out forwards; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+input, textarea, select {
+    background: #000 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    color: white !important;
+}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="landing-view" class="min-h-screen flex flex-col items-center justify-center px-6">
+<h1 class="text-6xl font-black italic">ITS<span class="text-purple-600">BAD.</span></h1>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-4xl">
+<button onclick="switchView('showcase','shopee')" class="bg-neutral-900 p-8 rounded-3xl">Shopee</button>
+<button onclick="switchView('showcase','tiktok')" class="bg-neutral-900 p-8 rounded-3xl">TikTok</button>
+<button onclick="switchView('showcase','tokopedia')" class="bg-neutral-900 p-8 rounded-3xl">Tokopedia</button>
+</div>
+
+<button onclick="toggleLoginModal(true)" class="mt-20 opacity-20">
+<i data-lucide="lock"></i>
+</button>
+</div>
+
+<!-- SHOWCASE -->
+<div id="showcase-view" class="hidden min-h-screen p-6">
+<button onclick="switchView('landing')" class="mb-6">← Kembali</button>
+
+<h2 id="platform-title-nav" class="text-2xl font-bold mb-8"></h2>
+
+<div id="admin-panel" class="hidden mb-10 bg-neutral-900 p-6 rounded-3xl">
+<form id="product-form" class="grid gap-4">
+<input type="hidden" id="edit-id">
+<input id="in-title" placeholder="Judul Produk" required class="p-3 rounded-xl">
+<input id="in-link" placeholder="Link Produk" required class="p-3 rounded-xl">
+<textarea id="in-desc" placeholder="Deskripsi" class="p-3 rounded-xl"></textarea>
+<input id="in-image" placeholder="URL Gambar" class="p-3 rounded-xl">
+<input id="in-order" type="number" placeholder="Urutan (0 = AI)" class="p-3 rounded-xl">
+<button class="bg-white text-black py-3 rounded-xl font-bold">Simpan Data</button>
+</form>
+</div>
+
+<div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+<p id="empty-msg" class="hidden text-center text-neutral-600 mt-20">Katalog Kosong</p>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="login-modal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center">
+<form id="login-form" class="bg-neutral-900 p-10 rounded-3xl">
+<input id="login-pass" type="password" placeholder="Password" class="p-4 rounded-xl w-full mb-4">
+<button class="bg-white text-black px-6 py-3 rounded-xl w-full">Masuk</button>
+</form>
+</div>
+
+<!-- FIREBASE SCRIPT -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
 import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// 🔥 FIREBASE CONFIG BARU
 const firebaseConfig = {
   apiKey: "AIzaSyCKX6uS1motUTc5EGX1PnB9c9nHiu00438",
   authDomain: "showcase-itsbad.firebaseapp.com",
@@ -15,7 +99,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+getAnalytics(app);
 const db = getFirestore(app);
 
 let isAdmin = false;
@@ -23,186 +107,102 @@ let allProducts = [];
 let currentPlatform = null;
 let isEditing = false;
 
-// 🔥 MANUAL AI SYSTEM
+/* MANUAL AI */
 function manualAI(title, desc) {
     let score = 50;
-
     if (title.length > 20) score -= 10;
     if (desc.length > 50) score -= 10;
-
-    const keywords = ["best", "promo", "terlaris", "viral", "murah"];
-    keywords.forEach(k => {
-        if (title.toLowerCase().includes(k)) score -= 15;
-    });
-
-    if (score < 1) score = 1;
-    if (score > 100) score = 100;
-
-    return score;
+    if (title.toLowerCase().includes("promo")) score -= 20;
+    return score < 1 ? 1 : score;
 }
 
-// 🔥 REALTIME LISTENER
-function setupRealtimeData() {
-    const q = collection(db, "products");
-    onSnapshot(q, (snapshot) => {
-        allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        if (currentPlatform) renderGrid();
-    });
-}
-setupRealtimeData();
+/* REALTIME */
+onSnapshot(collection(db,"products"), snap=>{
+    allProducts = snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(currentPlatform) renderGrid();
+});
 
-// 🔥 VIEW SWITCH
-window.switchView = (view, platform = null) => {
+/* SWITCH VIEW */
+window.switchView=(view,platform=null)=>{
     document.getElementById('landing-view').classList.add('hidden');
     document.getElementById('showcase-view').classList.add('hidden');
 
-    if (view === 'landing') {
+    if(view==="landing"){
         document.getElementById('landing-view').classList.remove('hidden');
-        currentPlatform = null;
-    } else {
+    }else{
+        currentPlatform=platform;
+        document.getElementById('platform-title-nav').innerText=platform.toUpperCase()+" HUB";
         document.getElementById('showcase-view').classList.remove('hidden');
-        currentPlatform = platform;
-        document.getElementById('platform-title-nav').innerText = platform.toUpperCase() + " HUB";
         renderGrid();
     }
-
-    window.scrollTo(0,0);
-    lucide.createIcons();
 };
 
-// 🔥 LOGIN ADMIN
-document.getElementById('login-form').onsubmit = (e) => {
+/* LOGIN */
+window.toggleLoginModal=(s)=>{
+    document.getElementById('login-modal').classList.toggle('hidden',!s);
+};
+
+document.getElementById('login-form').onsubmit=e=>{
     e.preventDefault();
-    if (document.getElementById('login-pass').value === '110603') {
-        isAdmin = true;
-        toggleLoginModal(false);
+    if(document.getElementById('login-pass').value==="110603"){
+        isAdmin=true;
         document.getElementById('admin-panel').classList.remove('hidden');
-        document.getElementById('admin-indicator').classList.remove('hidden');
-        document.getElementById('spacer-nav').classList.add('hidden');
-        renderGrid();
-    } else {
-        alert("Password Salah!");
-    }
+        toggleLoginModal(false);
+    }else alert("Password salah");
 };
 
-window.logoutAdmin = () => {
-    isAdmin = false;
-    document.getElementById('admin-panel').classList.add('hidden');
-    document.getElementById('admin-indicator').classList.add('hidden');
-    document.getElementById('spacer-nav').classList.remove('hidden');
-    renderGrid();
-};
-
-// 🔥 PRODUCT FORM
-document.getElementById('product-form').onsubmit = async (e) => {
+/* FORM */
+document.getElementById('product-form').onsubmit=async e=>{
     e.preventDefault();
+    if(!isAdmin) return alert("Login dulu");
 
-    if (!isAdmin) {
-        alert("Login admin dulu.");
-        return;
+    let title=inTitle.value;
+    let desc=inDesc.value;
+    let link=inLink.value;
+    let image=inImage.value;
+    let order=parseInt(inOrder.value);
+
+    if(order===0||isNaN(order)) order=manualAI(title,desc);
+
+    const data={title,description:desc,link,image,sortOrder:order,platform:currentPlatform};
+
+    if(isEditing){
+        await updateDoc(doc(db,"products",editId.value),data);
+    }else{
+        await addDoc(collection(db,"products"),data);
     }
 
-    const title = document.getElementById('in-title').value;
-    const desc = document.getElementById('in-desc').value;
-    const link = document.getElementById('in-link').value;
-    const image = document.getElementById('in-image').value;
-    let order = parseInt(document.getElementById('in-order').value);
-
-    if (order === 0 || isNaN(order)) {
-        document.getElementById('ai-status').classList.remove('hidden');
-        order = manualAI(title, desc);
-        setTimeout(() => {
-            document.getElementById('ai-status').classList.add('hidden');
-        }, 800);
-    }
-
-    const payload = {
-        title,
-        description: desc,
-        sortOrder: order,
-        link,
-        image,
-        platform: currentPlatform,
-        createdAt: new Date()
-    };
-
-    try {
-        if (isEditing) {
-            const id = document.getElementById('edit-id').value;
-            await updateDoc(doc(db, "products", id), payload);
-        } else {
-            await addDoc(collection(db, "products"), payload);
-        }
-
-        resetForm();
-    } catch (err) {
-        alert("Gagal simpan: " + err.message);
-    }
+    e.target.reset();
 };
 
-// 🔥 EDIT
-window.startEdit = (id) => {
-    const p = allProducts.find(x => x.id === id);
-    if (!p) return;
+/* RENDER */
+function renderGrid(){
+    const grid=document.getElementById('product-grid');
+    const empty=document.getElementById('empty-msg');
 
-    isEditing = true;
-    document.getElementById('edit-id').value = p.id;
-    document.getElementById('in-title').value = p.title;
-    document.getElementById('in-desc').value = p.description;
-    document.getElementById('in-link').value = p.link;
-    document.getElementById('in-image').value = p.image || '';
-    document.getElementById('in-order').value = p.sortOrder;
+    const filtered=allProducts
+    .filter(p=>p.platform===currentPlatform)
+    .sort((a,b)=>a.sortOrder-b.sortOrder);
 
-    document.getElementById('btn-submit').innerText = 'Update Produk';
-};
-
-// 🔥 DELETE
-window.deleteProd = async (id) => {
-    if (confirm("Hapus produk ini?")) {
-        await deleteDoc(doc(db, "products", id));
-    }
-};
-
-// 🔥 RESET
-window.resetForm = () => {
-    isEditing = false;
-    document.getElementById('product-form').reset();
-    document.getElementById('edit-id').value = '';
-    document.getElementById('btn-submit').innerText = 'Simpan Data';
-};
-
-// 🔥 RENDER GRID
-function renderGrid() {
-    const grid = document.getElementById('product-grid');
-    const empty = document.getElementById('empty-msg');
-
-    const filtered = allProducts
-        .filter(p => p.platform === currentPlatform)
-        .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
-
-    if (filtered.length === 0) {
-        grid.innerHTML = '';
+    if(filtered.length===0){
+        grid.innerHTML="";
         empty.classList.remove('hidden');
         return;
     }
 
     empty.classList.add('hidden');
 
-    grid.innerHTML = filtered.map((p, i) => `
-        <div class="bg-neutral-900/40 rounded-3xl border border-white/5 overflow-hidden hover:-translate-y-2 transition-all duration-500">
-            <div class="aspect-square bg-black overflow-hidden">
-                <img src="${p.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f'}"
-                     class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
-            </div>
-            <div class="p-6">
-                <h4 class="text-lg font-bold mb-2">${p.title}</h4>
-                <p class="text-neutral-500 text-xs mb-4">${p.description || "Tidak ada deskripsi."}</p>
-                <a href="${p.link}" target="_blank"
-                   class="block text-center py-3 bg-white text-black rounded-xl font-bold hover:bg-purple-600 hover:text-white transition-all">
-                   Beli Produk
-                </a>
-            </div>
-        </div>
-    `).join('');
+    grid.innerHTML=filtered.map((p,i)=>`
+    <div class="bg-neutral-900 p-6 rounded-3xl">
+        <img src="${p.image||'https://picsum.photos/500'}" class="rounded-xl mb-4">
+        <h3 class="font-bold">${p.title}</h3>
+        <p class="text-xs text-neutral-400 mb-4">${p.description||""}</p>
+        <a href="${p.link}" target="_blank" class="block bg-white text-black py-2 rounded-xl text-center">Beli Produk</a>
+    </div>`).join('');
 }
+
+lucide.createIcons();
 </script>
+
+</body>
+</html>
