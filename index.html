@@ -1,411 +1,446 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITSBAD | Fullstack Showcase</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        
-        :root {
-            --accent: #ffffff;
-            --surface: #0a0a0a;
-            --border: rgba(255, 255, 255, 0.08);
-        }
+<!DOCTYPE html>  <html lang="id">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Itsbad Showcase - Rekomendasi Produk</title>  
+    <script src="https://cdn.tailwindcss.com"></script>  
+    <script src="https://unpkg.com/lucide@latest"></script>  
+    <style>  
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');  body {  
+        font-family: 'Inter', sans-serif;  
+        background-color: #050505;  
+        color: white;  
+        overflow-x: hidden;  
+    }  
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #000;
-            color: #fff;
-            scroll-behavior: smooth;
-        }
+    .fade-in { animation: fadeIn 0.6s ease-out forwards; }  
+    @keyframes fadeIn {  
+        from { opacity: 0; transform: translateY(10px); }  
+        to { opacity: 1; transform: translateY(0); }  
+    }  
 
-        /* Fullstack Glassmorphism */
-        .premium-blur {
-            background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(15px) saturate(180%);
-            -webkit-backdrop-filter: blur(15px) saturate(180%);
-            border: 1px solid var(--border);
-        }
+    ::-webkit-scrollbar { width: 5px; }  
+    ::-webkit-scrollbar-track { background: #050505; }  
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }  
 
-        /* Content Reveal Animation */
-        .reveal {
-            animation: revealContent 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes revealContent {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .platform-card:hover {  
+        transform: translateY(-8px);  
+        border-color: rgba(147, 51, 234, 0.3);  
+        background: rgba(255, 255, 255, 0.05);  
+    }  
 
-        /* Product Card Interactions */
-        .card-stack {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .card-stack:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-5px);
-            background: #0f0f0f;
-        }
+    input, textarea, select {  
+        background: #000 !important;  
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;  
+        color: white !important;  
+    }  
+    input:focus, textarea:focus {  
+        border-color: #9333ea !important;  
+        outline: none;  
+    }  
+</style>
 
-        /* Toast Notification */
-        #toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 1000;
-            transform: translateY(100px);
-            transition: transform 0.5s ease;
-        }
-        #toast.show { transform: translateY(0); }
+</head>  
+<body>  <!-- Latar Belakang Estetik -->  
+<div class="fixed inset-0 pointer-events-none z-[-1]">  
+    <div class="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-purple-900/10 blur-[150px] rounded-full"></div>  
+    <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-900/10 blur-[150px] rounded-full"></div>  
+</div>  
 
-        /* Custom Inputs */
-        .input-field {
-            background: #000;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-        .input-field:focus {
-            border-color: #fff;
-            outline: none;
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
-        }
+<!-- Loader Awal -->  
+<div id="main-loader" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center transition-opacity duration-500">  
+    <div class="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mb-4"></div>  
+    <p class="text-[10px] font-bold tracking-[0.3em] uppercase opacity-50">Sinkronisasi Produk...</p>  
+</div>  
 
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-    </style>
-</head>
-<body class="selection:bg-white selection:text-black">
+<!-- Halaman Depan (Landing) -->  
+<div id="landing-view" class="hidden min-h-screen flex flex-col items-center justify-center px-6 py-12 fade-in">  
+    <div class="text-center mb-16">  
+        <div class="inline-flex p-1 rounded-full bg-white/5 border border-white/10 mb-6">  
+            <span class="px-4 py-1 text-[9px] font-black tracking-[0.3em] uppercase text-purple-400">Rekomendasi Produk by Itsbad</span>  
+        </div>  
+        <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4">ITS<span class="text-purple-600">BAD.</span></h1>  
+        <p class="text-neutral-500 uppercase tracking-[0.5em] text-[9px] font-bold">Pilih Platform Rekomendasi</p>  
+    </div>  
 
-    <div id="toast" class="premium-blur px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
-        <div id="toast-icon" class="w-2 h-2 rounded-full"></div>
-        <p id="toast-msg" class="text-[11px] font-bold uppercase tracking-widest"></p>
-    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">  
+        <!-- Shopee -->  
+        <button onclick="switchView('showcase', 'shopee')" class="platform-card group relative bg-neutral-900/30 border border-white/5 p-10 rounded-[2.5rem] text-left transition-all duration-500 shadow-2xl">  
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">  
+                <i data-lucide="shopping-bag" class="text-white"></i>  
+            </div>  
+            <h3 class="text-3xl font-black italic uppercase mb-2">Shopee</h3>  
+            <p class="text-neutral-500 text-xs mb-8 opacity-70">Produk pilihan di Shopee.</p>  
+            <div class="flex items-center gap-2 text-[10px] font-black uppercase text-purple-500">Explore <i data-lucide="arrow-right" class="w-3 h-3"></i></div>  
+        </button>  
+        <!-- TikTok -->  
+        <button onclick="switchView('showcase', 'tiktok')" class="platform-card group relative bg-neutral-900/30 border border-white/5 p-10 rounded-[2.5rem] text-left transition-all duration-500 shadow-2xl">  
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">  
+                <i data-lucide="video" class="text-white"></i>  
+            </div>  
+            <h3 class="text-3xl font-black italic uppercase mb-2">TikTok</h3>  
+            <p class="text-neutral-500 text-xs mb-8 opacity-70">Produk viral di TikTok Shop.</p>  
+            <div class="flex items-center gap-2 text-[10px] font-black uppercase text-purple-500">Explore <i data-lucide="arrow-right" class="w-3 h-3"></i></div>  
+        </button>  
+        <!-- Tokopedia -->  
+        <button onclick="switchView('showcase', 'tokopedia')" class="platform-card group relative bg-neutral-900/30 border border-white/5 p-10 rounded-[2.5rem] text-left transition-all duration-500 shadow-2xl">  
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">  
+                <i data-lucide="store" class="text-white"></i>  
+            </div>  
+            <h3 class="text-3xl font-black italic uppercase mb-2">Tokopedia</h3>  
+            <p class="text-neutral-500 text-xs mb-8 opacity-70">Produk pilihan di Tokopedia.</p>  
+            <div class="flex items-center gap-2 text-[10px] font-black uppercase text-purple-500">Explore <i data-lucide="arrow-right" class="w-3 h-3"></i></div>  
+        </button>  
+    </div>  
 
-    <nav class="fixed top-0 w-full z-[80] border-b border-white/[0.05] bg-black/50 backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3 group cursor-pointer" onclick="switchView('landing')">
-                <div class="w-10 h-10 bg-white text-black flex items-center justify-center rounded-xl font-extrabold italic transition-transform group-hover:rotate-12">IB</div>
-                <span class="text-sm font-extrabold tracking-[0.2em] uppercase">Showcase</span>
-            </div>
-            <div class="flex items-center gap-4">
-                <div id="admin-badge" class="hidden flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                    <span class="text-[9px] font-black uppercase tracking-widest text-neutral-400">Master Access</span>
-                    <button onclick="logoutAdmin()" class="ml-2 text-red-500 hover:scale-110 transition-transform"><i data-lucide="power" class="w-3.5 h-3.5"></i></button>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- Tombol Admin Tersembunyi -->  
+    <button onclick="toggleLoginModal(true)" class="mt-20 opacity-0 hover:opacity-10 transition-opacity">  
+        <i data-lucide="lock" class="w-4 h-4"></i>  
+    </button>  
+</div>  
 
-    <main id="landing-view" class="pt-40 pb-20 px-6 min-h-screen hidden">
-        <div class="max-w-7xl mx-auto">
-            <div class="mb-20 reveal">
-                <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter italic mb-6">CURATED<br><span class="text-neutral-500">EXCELLENCE.</span></h1>
-                <p class="text-neutral-500 max-w-xl text-lg font-medium leading-relaxed">Pintu masuk ke ekosistem digital Itsbad. Pilih platform untuk melihat kurasi produk pilihan.</p>
-            </div>
+<!-- Halaman Galeri Produk -->  
+<div id="showcase-view" class="hidden min-h-screen pb-20 fade-in">  
+    <nav class="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5 px-6 py-4">  
+        <div class="max-w-7xl mx-auto flex justify-between items-center">  
+            <button onclick="switchView('landing')" class="flex items-center gap-2 text-neutral-400 hover:text-white transition-all group">  
+                <i data-lucide="chevron-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>  
+                <span class="text-[10px] font-black uppercase tracking-widest">Kembali</span>  
+            </button>  
+            <h2 id="platform-title-nav" class="text-lg font-black italic uppercase tracking-tighter">PLATFORM HUB</h2>  
+            <div id="admin-indicator" class="hidden">  
+                <button onclick="logoutAdmin()" class="text-red-500"><i data-lucide="log-out" class="w-5 h-5"></i></button>  
+            </div>  
+            <div id="spacer-nav" class="w-10"></div>  
+        </div>  
+    </nav>  
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal" style="animation-delay: 0.1s;">
-                <button onclick="switchView('showcase', 'shopee')" class="card-stack p-10 rounded-[2.5rem] border border-white/5 text-left group">
-                    <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-10 transition-colors group-hover:bg-white group-hover:text-black">
-                        <i data-lucide="shopping-bag"></i>
-                    </div>
-                    <h3 class="text-3xl font-bold italic mb-2 tracking-tight">SHOPEE</h3>
-                    <p class="text-neutral-500 text-sm mb-10">Trend viral & fashion premium.</p>
-                    <span class="text-[10px] font-black tracking-widest uppercase border-b border-white/20 pb-1">Enter Hub</span>
-                </button>
+    <main class="max-w-7xl mx-auto px-6 py-12">  
+        <!-- Form Menu Admin (Hanya terlihat jika isAdmin = true) -->  
+        <div id="admin-panel" class="hidden mb-12 bg-neutral-900 border border-purple-500/20 rounded-[2rem] p-8 shadow-2xl">  
+            <div class="flex justify-between items-center mb-6">  
+                <h3 id="form-label" class="text-xl font-black italic uppercase flex items-center gap-2">  
+                    <i data-lucide="settings" class="text-purple-500"></i> Kelola Produk  
+                </h3>  
+                <button onclick="clearAllData()" class="text-[9px] font-black uppercase bg-red-600/20 text-red-500 border border-red-500/30 px-4 py-2 rounded-full hover:bg-red-600 hover:text-white transition-all">  
+                    Hapus Semua Data  
+                </button>  
+            </div>  
+            <form id="product-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">  
+                <input type="hidden" id="edit-id">  
+                <div class="space-y-4">  
+                    <input id="in-title" required placeholder="Judul Produk" class="w-full rounded-xl px-5 py-3 outline-none">  
+                    <input id="in-link" required type="url" placeholder="Link Produk (URL)" class="w-full rounded-xl px-5 py-3 outline-none text-sm">  
+                    <textarea id="in-desc" placeholder="Deskripsi Singkat..." class="w-full rounded-xl px-5 py-3 h-24 resize-none outline-none text-sm"></textarea>  
+                </div>  
+                <div class="space-y-4">  
+                    <div class="flex gap-2">  
+                        <input id="in-image" placeholder="URL Gambar Produk" class="flex-1 rounded-xl px-5 py-3 outline-none text-xs">  
+                        <label class="bg-neutral-800 p-3 rounded-xl cursor-pointer hover:bg-neutral-700 transition-colors">  
+                            <i data-lucide="image" class="w-5 h-5"></i>  
+                            <input type="file" id="file-input" class="hidden" accept="image/*">  
+                        </label>  
+                    </div>  
+                    <input id="in-order" type="number" required placeholder="Urutan (Contoh: 1, 2, 3)" class="w-full rounded-xl px-5 py-3 outline-none">  
+                    <button type="submit" id="btn-submit" class="w-full bg-white text-black font-black py-4 rounded-xl hover:bg-purple-600 hover:text-white transition-all uppercase tracking-widest text-xs shadow-xl">  
+                        Simpan Ke Database  
+                    </button>  
+                </div>  
+            </form>  
+        </div>  
 
-                <button onclick="switchView('showcase', 'tiktok')" class="card-stack p-10 rounded-[2.5rem] border border-white/5 text-left group">
-                    <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-10 transition-colors group-hover:bg-white group-hover:text-black">
-                        <i data-lucide="video"></i>
-                    </div>
-                    <h3 class="text-3xl font-bold italic mb-2 tracking-tight">TIKTOK</h3>
-                    <p class="text-neutral-500 text-sm mb-10">Gadget unik & rekomendasi video.</p>
-                    <span class="text-[10px] font-black tracking-widest uppercase border-b border-white/20 pb-1">Enter Hub</span>
-                </button>
+        <!-- Grid Produk -->  
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>  
+          
+        <div id="empty-msg" class="hidden py-40 text-center text-neutral-600">  
+            <i data-lucide="package" class="w-12 h-12 mx-auto mb-4 opacity-10"></i>  
+            <p class="text-xs font-bold uppercase tracking-widest">Belum ada produk untuk kategori ini.</p>  
+        </div>  
+    </main>  
+</div>  
 
-                <button onclick="switchView('showcase', 'tokopedia')" class="card-stack p-10 rounded-[2.5rem] border border-white/5 text-left group">
-                    <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-10 transition-colors group-hover:bg-white group-hover:text-black">
-                        <i data-lucide="layers"></i>
-                    </div>
-                    <h3 class="text-3xl font-bold italic mb-2 tracking-tight">TOKOPEDIA</h3>
-                    <p class="text-neutral-500 text-sm mb-10">Tech, hobby & peralatan kerja.</p>
-                    <span class="text-[10px] font-black tracking-widest uppercase border-b border-white/20 pb-1">Enter Hub</span>
-                </button>
-            </div>
-            
-            <button onclick="toggleLoginModal(true)" class="mt-40 opacity-5 hover:opacity-100 transition-opacity">
-                <i data-lucide="fingerprint" class="w-5 h-5"></i>
-            </button>
-        </div>
-    </main>
+<!-- Modal Login Admin -->  
+<div id="login-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/95 backdrop-blur-xl p-6">  
+    <div class="w-full max-w-sm fade-in text-center">  
+        <div class="w-16 h-16 bg-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center rotate-12 shadow-2xl">  
+            <i data-lucide="lock" class="text-white w-8 h-8"></i>  
+        </div>  
+        <h3 class="text-3xl font-black italic mb-8 uppercase tracking-tighter">Admin Login</h3>  
+        <form id="login-form" class="space-y-4">  
+            <input id="login-pass" type="password" placeholder="••••••" class="w-full bg-neutral-900 border border-white/10 rounded-2xl px-6 py-5 text-center text-3xl tracking-[0.8em] outline-none focus:border-purple-600">  
+            <div class="flex gap-4">  
+                <button type="button" onclick="toggleLoginModal(false)" class="flex-1 py-4 bg-neutral-800 rounded-xl font-bold text-[10px] uppercase tracking-widest">Batal</button>  
+                <button type="submit" class="flex-[2] py-4 bg-white text-black rounded-xl font-black text-[10px] uppercase hover:bg-purple-600 hover:text-white transition-all tracking-widest shadow-xl">Masuk</button>  
+            </div>  
+        </form>  
+    </div>  
+</div>  
 
-    <main id="showcase-view" class="pt-32 pb-20 px-6 min-h-screen hidden">
-        <div class="max-w-7xl mx-auto">
-            <header class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 reveal">
-                <div>
-                    <button onclick="switchView('landing')" class="flex items-center gap-2 text-neutral-500 hover:text-white transition-all text-[10px] font-bold uppercase tracking-widest mb-4">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Central
-                    </button>
-                    <h2 id="platform-title" class="text-5xl md:text-7xl font-extrabold italic tracking-tighter uppercase">PLATFORM</h2>
-                </div>
-                <div class="text-right">
-                    <p id="stats-count" class="text-3xl font-bold italic">00</p>
-                    <p class="text-[9px] font-black text-neutral-500 uppercase tracking-widest">Items Indexed</p>
-                </div>
-            </header>
+<script type="module">  
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";  
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";  
+    import {   
+        getFirestore,   
+        collection,   
+        addDoc,   
+        onSnapshot,   
+        doc,   
+        deleteDoc,   
+        updateDoc,   
+        getDocs,   
+        writeBatch   
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";  
 
-            <div id="admin-panel" class="hidden reveal border border-white/10 rounded-[2.5rem] p-10 mb-20 bg-neutral-950/50 backdrop-blur-md">
-                <div class="flex items-center gap-3 mb-10">
-                    <div class="w-1 h-6 bg-white rounded-full"></div>
-                    <h4 class="text-lg font-bold italic uppercase tracking-widest">Database Editor</h4>
-                </div>
-                <form id="product-form" class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <input type="hidden" id="edit-id">
-                    <div class="md:col-span-2 space-y-4">
-                        <input id="in-title" required placeholder="Judul Item" class="input-field w-full px-6 py-4 rounded-xl text-sm font-semibold">
-                        <textarea id="in-desc" placeholder="Deskripsi atau catatan khusus..." class="input-field w-full px-6 py-4 rounded-xl text-sm h-32 resize-none"></textarea>
-                    </div>
-                    <div class="space-y-4">
-                        <input id="in-link" required type="url" placeholder="Direct Link (URL)" class="input-field w-full px-6 py-4 rounded-xl text-sm font-semibold text-blue-400">
-                        <div class="flex gap-2">
-                            <input id="in-image" placeholder="Image URL" class="input-field flex-1 px-6 py-4 rounded-xl text-[11px]">
-                            <label class="bg-white text-black p-4 rounded-xl cursor-pointer hover:bg-neutral-200 transition-all flex items-center">
-                                <i data-lucide="image-plus" class="w-4 h-4"></i>
-                                <input type="file" id="file-input" class="hidden" accept="image/*">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <input id="in-order" type="number" required placeholder="Prioritas (Sort)" class="input-field w-full px-6 py-4 rounded-xl text-sm">
-                        <button type="submit" id="btn-submit" class="w-full h-[60px] bg-white text-black font-black uppercase text-[10px] tracking-widest rounded-xl hover:scale-[1.02] transition-transform">
-                            Sync to Cloud
-                        </button>
-                    </div>
-                </form>
-            </div>
+    /* ===============================  
+       CONFIG BARU (showcaseitsbad)  
+    ================================ */  
+    const firebaseConfig = {  
+        apiKey: "AIzaSyBb3HZbY7Tk6gWQagRSEOhi0dZVZ5mWFDA",  
+        authDomain: "showcaseitsbad.firebaseapp.com",  
+        projectId: "showcaseitsbad",  
+        storageBucket: "showcaseitsbad.firebasestorage.app",  
+        messagingSenderId: "964069299303",  
+        appId: "1:964069299303:web:dfcc88ced5a701ce2eb0c2"  
+    };  
 
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 reveal"></div>
+    let db, auth, user;  
+    let isAdmin = false;  
+    let allProducts = [];  
+    let currentPlatform = null;  
+    let isEditing = false;  
 
-            <div id="empty-msg" class="hidden py-40 text-center text-neutral-700">
-                <p class="text-xs font-bold tracking-[0.4em] uppercase">No active records found</p>
-            </div>
-        </div>
-    </main>
+    /* ===============================  
+       INITIALIZE  
+    ================================ */  
+    async function init() {  
+        try {  
+            const app = initializeApp(firebaseConfig);  
+            auth = getAuth(app);  
+            db = getFirestore(app);  
 
-    <div id="login-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/95 backdrop-blur-2xl p-6">
-        <div class="w-full max-w-sm reveal text-center">
-            <h3 class="text-3xl font-extrabold italic mb-10 uppercase tracking-tighter">Security Key</h3>
-            <form id="login-form" class="space-y-6">
-                <input id="login-pass" type="password" placeholder="••••••" class="w-full bg-transparent border-b border-white/10 text-center text-5xl font-bold tracking-[0.5em] outline-none focus:border-white transition-colors pb-4">
-                <div class="flex flex-col gap-4">
-                    <button type="submit" class="bg-white text-black py-5 rounded-2xl font-black text-xs uppercase tracking-widest">Verify</button>
-                    <button type="button" onclick="toggleLoginModal(false)" class="text-neutral-600 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest">Back</button>
-                </div>
-            </form>
-        </div>
-    </div>
+            // Masuk Secara Anonim sesuai aturan  
+            const cred = await signInAnonymously(auth);  
+            user = cred.user;  
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+            hideLoader();  
+            setupRealtimeData();  
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBb3HZbY7Tk6gWQagRSEOhi0dZVZ5mWFDA",
-            authDomain: "showcaseitsbad.firebaseapp.com",
-            projectId: "showcaseitsbad",
-            storageBucket: "showcaseitsbad.firebasestorage.app",
-            messagingSenderId: "964069299303",
-            appId: "1:964069299303:web:dfcc88ced5a701ce2eb0c2"
-        };
+        } catch (err) {  
+            console.error("Firebase Init Fail:", err);  
+            alert("Koneksi Database Gagal: " + err.message);  
+            hideLoader();  
+        }  
+    }  
 
-        let db, auth, isAdmin = false, allProducts = [], currentPlatform = null, isEditing = false;
+    function hideLoader() {  
+        const loader = document.getElementById('main-loader');  
+        loader.style.opacity = '0';  
+        setTimeout(() => {  
+            loader.classList.add('hidden');  
+            document.getElementById('landing-view').classList.remove('hidden');  
+            lucide.createIcons();  
+        }, 500);  
+    }  
 
-        async function init() {
-            try {
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                await signInAnonymously(auth);
-                switchView('landing');
-                setupRealtimeData();
-                showToast("System Connected", "success");
-            } catch (err) { 
-                showToast("Database Error", "error");
-            }
-        }
+    /* ===============================  
+       DATABASE LISTENERS  
+    ================================ */  
+    function setupRealtimeData() {  
+        if (!user) return;  
+        // Root collection: "products"  
+        const colRef = collection(db, 'products');  
+        onSnapshot(colRef, (snapshot) => {  
+            allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));  
+            if (currentPlatform) renderGrid();  
+        }, (err) => console.error("Snapshot error:", err));  
+    }  
 
-        function setupRealtimeData() {
-            onSnapshot(collection(db, 'products'), (snapshot) => {
-                allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                if (currentPlatform) renderGrid();
-            });
-        }
+    /* ===============================  
+       ACTIONS & UI LOGIC  
+    ================================ */  
+    window.switchView = (view, platform = null) => {  
+        document.getElementById('landing-view').classList.add('hidden');  
+        document.getElementById('showcase-view').classList.add('hidden');  
 
-        window.showToast = (msg, type = "success") => {
-            const toast = document.getElementById('toast');
-            const icon = document.getElementById('toast-icon');
-            const msgEl = document.getElementById('toast-msg');
-            
-            icon.className = `w-2 h-2 rounded-full ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
-            msgEl.innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        };
+        if (view === 'landing') {  
+            document.getElementById('landing-view').classList.remove('hidden');  
+            currentPlatform = null;  
+        } else {  
+            document.getElementById('showcase-view').classList.remove('hidden');  
+            currentPlatform = platform;  
+            document.getElementById('platform-title-nav').innerText = platform.toUpperCase() + " HUB";  
+            renderGrid();  
+        }  
+        window.scrollTo(0,0);  
+        lucide.createIcons();  
+    };  
 
-        window.switchView = (view, platform = null) => {
-            document.getElementById('landing-view').classList.add('hidden');
-            document.getElementById('showcase-view').classList.add('hidden');
-            
-            if (view === 'landing') {
-                document.getElementById('landing-view').classList.remove('hidden');
-                currentPlatform = null;
-            } else {
-                document.getElementById('showcase-view').classList.remove('hidden');
-                currentPlatform = platform;
-                document.getElementById('platform-title').innerText = platform;
-                renderGrid();
-            }
-            lucide.createIcons();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
+    window.toggleLoginModal = (show) => {  
+        const modal = document.getElementById('login-modal');  
+        modal.classList.toggle('hidden', !show);  
+        if (show) modal.classList.add('flex');  
+        else modal.classList.remove('flex');  
+    };  
 
-        window.toggleLoginModal = (show) => {
-            const modal = document.getElementById('login-modal');
-            modal.classList.toggle('hidden', !show);
-            if(show) modal.classList.add('flex'); else modal.classList.remove('flex');
-        };
+    document.getElementById('login-form').onsubmit = (e) => {  
+        e.preventDefault();  
+        if (document.getElementById('login-pass').value === '110603') {  
+            isAdmin = true;  
+            toggleLoginModal(false);  
+            document.getElementById('admin-panel').classList.remove('hidden');  
+            document.getElementById('admin-indicator').classList.remove('hidden');  
+            document.getElementById('spacer-nav').classList.add('hidden');  
+            renderGrid();  
+        } else {  
+            alert("Password Salah!");  
+        }  
+    };  
 
-        document.getElementById('login-form').onsubmit = (e) => {
-            e.preventDefault();
-            if (document.getElementById('login-pass').value === '110603') {
-                isAdmin = true;
-                toggleLoginModal(false);
-                document.getElementById('admin-panel').classList.remove('hidden');
-                document.getElementById('admin-badge').classList.remove('hidden');
-                showToast("Access Granted");
-                renderGrid();
-            } else { showToast("Invalid Key", "error"); }
-        };
+    window.logoutAdmin = () => {  
+        isAdmin = false;  
+        document.getElementById('admin-panel').classList.add('hidden');  
+        document.getElementById('admin-indicator').classList.add('hidden');  
+        document.getElementById('spacer-nav').classList.remove('hidden');  
+        renderGrid();  
+    };  
 
-        window.logoutAdmin = () => {
-            isAdmin = false;
-            document.getElementById('admin-panel').classList.add('hidden');
-            document.getElementById('admin-badge').classList.add('hidden');
-            showToast("Session Ended");
-            renderGrid();
-        };
+    /* ===============================  
+       CRUD HANDLERS  
+    ================================ */  
+    document.getElementById('product-form').onsubmit = async (e) => {  
+        e.preventDefault();  
+        if (!isAdmin) return;  
 
-        document.getElementById('product-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const payload = {
-                title: document.getElementById('in-title').value,
-                description: document.getElementById('in-desc').value,
-                link: document.getElementById('in-link').value,
-                image: document.getElementById('in-image').value,
-                sortOrder: parseInt(document.getElementById('in-order').value) || 0,
-                platform: currentPlatform,
-                updatedAt: new Date().toISOString()
-            };
-            try {
-                if (isEditing) {
-                    await updateDoc(doc(db, 'products', document.getElementById('edit-id').value), payload);
-                    showToast("Entry Updated");
-                } else {
-                    await addDoc(collection(db, 'products'), payload);
-                    showToast("Entry Created");
-                }
-                resetForm();
-            } catch (err) { showToast("Cloud Sync Failed", "error"); }
-        };
+        const payload = {  
+            title: document.getElementById('in-title').value,  
+            description: document.getElementById('in-desc').value,  
+            link: document.getElementById('in-link').value,  
+            image: document.getElementById('in-image').value,  
+            sortOrder: parseInt(document.getElementById('in-order').value) || 0,  
+            platform: currentPlatform,  
+            updatedAt: new Date().toISOString()  
+        };  
 
-        window.startEdit = (id) => {
-            const p = allProducts.find(x => x.id === id);
-            isEditing = true;
-            document.getElementById('edit-id').value = p.id;
-            document.getElementById('in-title').value = p.title;
-            document.getElementById('in-desc').value = p.description;
-            document.getElementById('in-link').value = p.link;
-            document.getElementById('in-image').value = p.image;
-            document.getElementById('in-order').value = p.sortOrder;
-            document.getElementById('btn-submit').innerText = "Update Record";
-            window.scrollTo({ top: 200, behavior: 'smooth' });
-        };
+        try {  
+            if (isEditing) {  
+                const id = document.getElementById('edit-id').value;  
+                await updateDoc(doc(db, 'products', id), payload);  
+                alert("Berhasil diperbarui!");  
+            } else {  
+                await addDoc(collection(db, 'products'), payload);  
+                alert("Berhasil disimpan!");  
+            }  
+            resetForm();  
+        } catch (err) {  
+            alert("Simpan gagal: " + err.message);  
+        }  
+    };  
 
-        window.deleteProd = async (id) => {
-            if (confirm("Delete this record permanently?")) {
-                await deleteDoc(doc(db, 'products', id));
-                showToast("Entry Deleted");
-            }
-        };
+    window.clearAllData = async () => {  
+        if (!isAdmin) return;  
+        if (confirm("Hapus seluruh produk secara permanen dari database?")) {  
+            try {  
+                const snapshot = await getDocs(collection(db, 'products'));  
+                const batch = writeBatch(db);  
+                snapshot.docs.forEach(d => batch.delete(doc(db, 'products', d.id)));  
+                await batch.commit();  
+                alert("Seluruh data telah dihapus.");  
+            } catch (err) { alert("Error: " + err.message); }  
+        }  
+    };  
 
-        window.resetForm = () => {
-            isEditing = false;
-            document.getElementById('product-form').reset();
-            document.getElementById('btn-submit').innerText = "Sync to Cloud";
-            lucide.createIcons();
-        };
+    window.resetForm = () => {  
+        isEditing = false;  
+        document.getElementById('product-form').reset();  
+        document.getElementById('edit-id').value = '';  
+        document.getElementById('btn-submit').innerText = 'Simpan Produk';  
+        document.getElementById('form-label').innerHTML = '<i data-lucide="settings" class="text-purple-500"></i> Kelola Produk';  
+        lucide.createIcons();  
+    };  
 
-        document.getElementById('file-input').onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    document.getElementById('in-image').value = reader.result;
-                    showToast("Image Attached");
-                };
-                reader.readAsDataURL(file);
-            }
-        };
+    window.startEdit = (id) => {  
+        const p = allProducts.find(x => x.id === id);  
+        if (!p) return;  
+        isEditing = true;  
+        document.getElementById('edit-id').value = p.id;  
+        document.getElementById('in-title').value = p.title;  
+        document.getElementById('in-desc').value = p.description;  
+        document.getElementById('in-link').value = p.link;  
+        document.getElementById('in-image').value = p.image || '';  
+        document.getElementById('in-order').value = p.sortOrder || 0;  
+          
+        document.getElementById('btn-submit').innerText = 'Update Data';  
+        document.getElementById('form-label').innerHTML = '<i data-lucide="edit-3" class="text-purple-500"></i> Edit Produk';  
+        lucide.createIcons();  
+        window.scrollTo({ top: 0, behavior: 'smooth' });  
+    };  
 
-        function renderGrid() {
-            const grid = document.getElementById('product-grid');
-            const empty = document.getElementById('empty-msg');
-            const filtered = allProducts
-                .filter(p => p.platform === currentPlatform)
-                .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+    window.deleteProd = async (id) => {  
+        if (confirm("Hapus produk ini?")) {  
+            try {  
+                await deleteDoc(doc(db, 'products', id));  
+            } catch (e) { alert("Error: " + e.message); }  
+        }  
+    };  
 
-            document.getElementById('stats-count').innerText = filtered.length < 10 ? `0${filtered.length}` : filtered.length;
+    // File to Base64  
+    document.getElementById('file-input').onchange = (e) => {  
+        const file = e.target.files[0];  
+        if (file) {  
+            if (file.size > 800000) { alert("Maksimal file 800KB."); return; }  
+            const reader = new FileReader();  
+            reader.onload = () => document.getElementById('in-image').value = reader.result;  
+            reader.readAsDataURL(file);  
+        }  
+    };  
 
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                empty.classList.remove('hidden');
-                return;
-            }
+    /* ===============================  
+       RENDER GRID  
+    ================================ */  
+    function renderGrid() {  
+        const grid = document.getElementById('product-grid');  
+        const empty = document.getElementById('empty-msg');  
+          
+        const filtered = allProducts  
+            .filter(p => p.platform === currentPlatform)  
+            .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));  
 
-            empty.classList.add('hidden');
-            grid.innerHTML = filtered.map((p, i) => `
-                <div class="card-stack border border-white/5 rounded-[2rem] p-5">
-                    <div class="aspect-square rounded-2xl overflow-hidden mb-6 bg-neutral-900 group relative">
-                        <img src="${p.image || ''}" class="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" loading="lazy">
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
-                        <div class="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[8px] font-black uppercase tracking-widest">
-                            #${p.sortOrder || i + 1}
-                        </div>
-                    </div>
-                    <div class="px-2">
-                        <div class="flex justify-between items-start mb-3">
-                            <h4 class="text-lg font-bold italic tracking-tight uppercase">${p.title}</h4>
-                            ${isAdmin ? `
-                                <div class="flex gap-3">
-                                    <button onclick="startEdit('${p.id}')" class="text-neutral-500 hover:text-white transition-colors"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                                    <button onclick="deleteProd('${p.id}')" class="text-neutral-500 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                                </div>
-                            ` : ''}
-                        </div>
-                        <p class="text-xs text-neutral-500 font-medium leading-relaxed mb-8 line-clamp-2">${p.description || 'Premium selection.'}</p>
-                        <a href="${p.link}" target="_blank" class="w-full py-4 rounded-xl border border-white/10 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all group/btn">
-                            Visit Store <i data-lucide="external-link" class="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform"></i>
-                        </a>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
+        if (filtered.length === 0) {  
+            grid.innerHTML = '';  
+            empty.classList.remove('hidden');  
+            return;  
+        }  
 
-        init();
-    </script>
-</body>
-</html>
+        empty.classList.add('hidden');  
+        grid.innerHTML = filtered.map((p, i) => `  
+            <div class="group relative bg-neutral-900/40 rounded-[2rem] border border-white/5 overflow-hidden transition-all duration-500 hover:border-purple-500/30 hover:-translate-y-2">  
+                <div class="aspect-square bg-black relative overflow-hidden">  
+                    <img src="${p.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c'">  
+                    <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>  
+                    <div class="absolute top-4 left-4 bg-black/60 px-3 py-1.5 rounded-full text-[9px] font-black border border-white/10 uppercase tracking-widest">  
+                        #${p.sortOrder || i + 1}  
+                    </div>  
+                    ${isAdmin ? `  
+                        <div class="absolute top-4 right-4 flex gap-2">  
+                            <button onclick="startEdit('${p.id}')" class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:bg-purple-600 hover:text-white transition-all shadow-lg"><i data-lucide="edit-3" class="w-4 h-4"></i></button>  
+                            <button onclick="deleteProd('${p.id}')" class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button>  
+                        </div>  
+                    ` : ''}  
+                </div>  
+                <div class="p-6">  
+                    <h4 class="text-lg font-bold uppercase tracking-tight mb-2 line-clamp-1 group-hover:text-purple-400 transition-colors">${p.title}</h4>  
+                    <p class="text-neutral-500 text-xs line-clamp-2 mb-6 font-medium leading-relaxed">${p.description || "Rekomendasi terbaik dari Itsbad."}</p>  
+                    <a href="${p.link}" target="_blank" class="w-full py-4 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase hover:bg-white hover:text-black transition-all text-center">  
+                        Beli Produk <i data-lucide="external-link" class="w-3 h-3"></i>  
+                    </a>  
+                </div>  
+            </div>  
+        `).join('');  
+        lucide.createIcons();  
+    }  
+
+    init();  
+</script>
+
+</body>  
+</html>  
