@@ -3,627 +3,710 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itsbad Showcase — Rekomendasi Produk</title>
+    <title>ITSBAD SHOWCASE | Premium Product Curation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #7c3aed;
+            --primary-glow: rgba(124, 58, 237, 0.4);
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
+            background-color: #030303;
             color: #ffffff;
             overflow-x: hidden;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        .font-grotesk {
+        .font-display {
             font-family: 'Space Grotesk', sans-serif;
         }
 
-        /* Typography System */
-        .text-title-1 {
-            font-size: 80px;
-            font-weight: 900;
-            line-height: 0.9;
-            letter-spacing: -0.05em;
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
 
-        .text-title-2 {
-            font-size: 48px;
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -0.03em;
-        }
-
-        .text-title-3 {
-            font-size: 32px;
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-
-        .text-heading-1 {
-            font-size: 24px;
-            font-weight: 800;
-            line-height: 1.2;
-            letter-spacing: -0.01em;
-        }
-
-        .text-heading-2 {
-            font-size: 20px;
-            font-weight: 800;
-            line-height: 1.3;
-            letter-spacing: -0.01em;
-        }
-
-        .text-heading-3 {
-            font-size: 18px;
-            font-weight: 700;
-            line-height: 1.4;
-        }
-
-        .text-body {
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 1.6;
-            color: #a3a3a3;
-        }
-
-        .text-body-small {
-            font-size: 12px;
-            font-weight: 500;
-            line-height: 1.5;
-            color: #737373;
-        }
-
-        .text-overline {
-            font-size: 10px;
-            font-weight: 800;
-            line-height: 1;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-        }
-
-        .text-overline-small {
-            font-size: 9px;
-            font-weight: 700;
-            line-height: 1;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-        }
-
-        .text-caption {
-            font-size: 11px;
-            font-weight: 600;
-            line-height: 1.4;
-            letter-spacing: 0.02em;
-        }
-
-        /* Spacing System */
-        .spacing-xs { gap: 4px; }
-        .spacing-sm { gap: 8px; }
-        .spacing-md { gap: 12px; }
-        .spacing-lg { gap: 16px; }
-        .spacing-xl { gap: 20px; }
-        .spacing-2xl { gap: 24px; }
-        .spacing-3xl { gap: 32px; }
-        .spacing-4xl { gap: 40px; }
-        .spacing-5xl { gap: 48px; }
-
-        /* Layout System */
-        .layout-stack {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .layout-stack-xs { gap: 4px; }
-        .layout-stack-sm { gap: 8px; }
-        .layout-stack-md { gap: 12px; }
-        .layout-stack-lg { gap: 16px; }
-        .layout-stack-xl { gap: 20px; }
-        .layout-stack-2xl { gap: 24px; }
-        .layout-stack-3xl { gap: 32px; }
-        .layout-stack-4xl { gap: 40px; }
-
-        /* Platform Cards */
-        .platform-card {
-            position: relative;
-            background: linear-gradient(145deg, rgba(18, 18, 18, 0.9), rgba(10, 10, 10, 0.95));
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.02);
-            border-radius: 48px;
-            padding: 40px;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .platform-card:hover {
-            border-color: rgba(168, 85, 247, 0.4);
-            transform: translateY(-8px);
-            box-shadow: 0 40px 80px -20px rgba(168, 85, 247, 0.2);
-        }
-
-        /* Product Cards */
-        .product-card {
-            background: linear-gradient(145deg, rgba(18, 18, 18, 0.9), rgba(10, 10, 10, 0.95));
-            border: 1px solid rgba(255, 255, 255, 0.02);
-            border-radius: 32px;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-card:hover {
-            border-color: rgba(168, 85, 247, 0.3);
-            transform: translateY(-6px);
-            box-shadow: 0 30px 60px -15px rgba(168, 85, 247, 0.15);
-        }
-
-        .product-image-container {
-            position: relative;
-            aspect-ratio: 1 / 1;
-            overflow: hidden;
-        }
-
-        .product-content {
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* Buttons */
-        .btn-explore {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 24px;
-        }
-
-        .btn-buy {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: all 0.3s ease;
-        }
-
-        .btn-buy:hover {
-            background: white;
-            color: black;
-            transform: translateY(-2px);
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 100px;
-            font-size: 9px;
-            font-weight: 800;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-
-        /* Input Fields */
-        .input-premium {
-            background: rgba(0, 0, 0, 0.6) !important;
-            border: 1px solid rgba(255, 255, 255, 0.03) !important;
-            border-radius: 16px !important;
-            padding: 16px 20px !important;
-            font-size: 14px !important;
-            color: white !important;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-
-        .input-premium:focus {
-            border-color: #a855f7 !important;
-            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1) !important;
-            background: rgba(20, 20, 20, 0.8) !important;
-        }
-
-        .input-premium::placeholder {
-            color: rgba(255, 255, 255, 0.2);
-            font-weight: 400;
-        }
-
-        /* Premium Scrollbar */
+        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
         }
-
         ::-webkit-scrollbar-track {
             background: #0a0a0a;
         }
-
         ::-webkit-scrollbar-thumb {
-            background: #a855f7;
-            border-radius: 100px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 3px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #9333ea;
+        /* Noise texture overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* Animations */
-        .fade-up {
-            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        /* Animated background gradient */
+        .gradient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: #030303;
+            overflow: hidden;
         }
 
-        @keyframes fadeUp {
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            top: -20%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -20%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Glass morphism utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-strong {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Platform cards */
+        .platform-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .platform-card:hover::before {
+            opacity: 1;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: rgba(124, 58, 237, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(124, 58, 237, 0.25);
+        }
+
+        .platform-icon {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .platform-card:hover .platform-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Product cards */
+        .product-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(124, 58, 237, 0.4);
+        }
+
+        .product-image-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .product-card:hover .product-image-wrapper::after {
+            opacity: 1;
+        }
+
+        .product-image {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.1);
+        }
+
+        /* Admin badge animation */
+        .admin-badge {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Input styling */
+        .input-field {
+            background: rgba(0, 0, 0, 0.5) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        /* Button effects */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        /* Loading animation */
+        .loader-ring {
+            display: inline-block;
+            position: relative;
+            width: 64px;
+            height: 64px;
+        }
+
+        .loader-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 51px;
+            height: 51px;
+            margin: 6px;
+            border: 3px solid #7c3aed;
+            border-radius: 50%;
+            animation: loader-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #7c3aed transparent transparent transparent;
+        }
+
+        .loader-ring div:nth-child(1) { animation-delay: -0.45s; }
+        .loader-ring div:nth-child(2) { animation-delay: -0.3s; }
+        .loader-ring div:nth-child(3) { animation-delay: -0.15s; }
+
+        @keyframes loader-ring {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Text reveal animation */
+        .reveal-text {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+
+        /* Stagger animation classes */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        /* Modal animation */
+        .modal-enter {
+            animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes modalIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: scale(0.9) translateY(20px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: scale(1) translateY(0);
             }
         }
 
-        /* Text Alignment Utilities */
-        .text-left { text-align: left; }
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        
-        .items-start { align-items: flex-start; }
-        .items-center { align-items: center; }
-        .items-end { align-items: flex-end; }
-        
-        .justify-start { justify-content: flex-start; }
-        .justify-center { justify-content: center; }
-        .justify-between { justify-content: space-between; }
-        .justify-end { justify-content: flex-end; }
-
-        /* Line Clamp */
-        .line-clamp-1 {
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(124, 58, 237, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 15s infinite linear;
         }
 
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
         }
 
-        /* Grid Pattern */
-        .grid-pattern {
-            background-image: linear-gradient(rgba(168, 85, 247, 0.02) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(168, 85, 247, 0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            transform: translateX(400px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* Custom select styling */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+        }
+
+        /* Hover link effect */
+        .link-hover {
+            position: relative;
+        }
+
+        .link-hover::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .link-hover:hover::after {
+            width: 100%;
         }
     </style>
 </head>
-<body class="antialiased relative">
+<body>
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
 
-    <!-- Dynamic Background -->
-    <div class="fixed inset-0 pointer-events-none z-[-2]">
-        <div class="absolute inset-0 bg-[#0a0a0a]"></div>
-        <div class="absolute inset-0 grid-pattern opacity-30"></div>
-        <div class="absolute top-[-10%] left-[-5%] w-[50%] h-[50%] bg-purple-600/10 blur-[150px] rounded-full"></div>
-        <div class="absolute bottom-[-10%] right-[-5%] w-[50%] h-[50%] bg-blue-600/10 blur-[150px] rounded-full"></div>
+    <!-- Animated Background -->
+    <div class="gradient-bg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <!-- Floating particles -->
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 2.5s;"></div>
     </div>
 
-    <!-- Loader -->
-    <div id="main-loader" class="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center transition-all duration-700">
-        <div class="layout-stack items-center spacing-2xl">
-            <div class="w-12 h-12 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-            <div class="layout-stack items-center spacing-xs">
-                <p class="text-overline-small text-white/40">Sinkronisasi Database</p>
-                <p class="text-overline-small text-white/20">Itsbad Showcase</p>
-            </div>
+    <!-- Initial Loader -->
+    <div id="main-loader" class="fixed inset-0 z-[100] bg-[#030303] flex flex-col items-center justify-center transition-all duration-700">
+        <div class="loader-ring mb-8"><div></div><div></div><div></div><div></div></div>
+        <p class="text-xs font-medium tracking-[0.4em] uppercase text-neutral-500 animate-pulse">Initializing Database</p>
+        <div class="mt-4 w-48 h-1 bg-neutral-800 rounded-full overflow-hidden">
+            <div id="loader-progress" class="h-full bg-gradient-to-r from-purple-600 to-cyan-500 w-0 transition-all duration-1000"></div>
         </div>
     </div>
 
-    <!-- Landing View -->
-    <div id="landing-view" class="hidden min-h-screen flex flex-col items-center px-6 py-20 relative">
-        <div class="max-w-7xl w-full layout-stack spacing-5xl">
-            
-            <!-- Premium Badge - Center -->
-            <div class="flex justify-center fade-up">
-                <div class="badge">
-                    <span class="w-1.5 h-1.5 bg-purple-600 rounded-full"></span>
-                    <span class="text-white/80">Product Recommendations</span>
-                    <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
+    <!-- Landing Page -->
+    <div id="landing-view" class="hidden min-h-screen flex flex-col relative">
+        <!-- Header -->
+        <header class="absolute top-0 left-0 right-0 z-50 px-6 py-6">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                        <i data-lucide="zap" class="text-white w-5 h-5"></i>
+                    </div>
+                    <span class="font-display font-bold text-xl tracking-tight">ITSBAD</span>
                 </div>
+                <button onclick="toggleLoginModal(true)" class="text-neutral-500 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/5">
+                    <i data-lucide="lock" class="w-5 h-5"></i>
+                </button>
             </div>
+        </header>
 
-            <!-- Hero Section - Center -->
-            <div class="layout-stack items-center spacing-lg fade-up">
-                <h1 class="text-title-1 font-grotesk text-center">
-                    <span class="bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">ITSBAD</span>
-                    <span class="text-white">Showcase.</span>
-                </h1>
-                <div class="flex justify-center gap-2">
-                    <div class="w-12 h-[2px] bg-gradient-to-r from-transparent via-purple-600 to-transparent"></div>
-                    <div class="w-12 h-[2px] bg-gradient-to-r from-transparent via-blue-600 to-transparent"></div>
+        <!-- Hero Section -->
+        <main class="flex-1 flex flex-col items-center justify-center px-6 py-20 relative">
+            <div class="text-center max-w-4xl mx-auto mb-16 relative z-10">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 stagger-item" id="hero-badge">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-400">Live Database Connected</span>
                 </div>
-                <p class="text-overline text-neutral-600">Sedulur saklawase • 2022</p>
-            </div>
-
-            <!-- Platform Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 fade-up">
                 
-                <!-- Shopee Card -->
-                <button onclick="switchView('showcase', 'shopee')" class="platform-card items-start text-left">
-                    <!-- Logo & Badge -->
-                    <div class="layout-stack spacing-lg w-full">
-                        <div class="flex items-start justify-between w-full">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#ee4d2d] to-[#fe6433] flex items-center justify-center">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
-                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm2 14h-4v-1h4v1zm0-3h-4v-1h4v1zm-5-6c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm6 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
-                                </svg>
-                            </div>
-                            <span class="badge text-[#ee4d2d] border-[#ee4d2d]/30">#1 E-COMMERCE</span>
-                        </div>
-                        
-                        <!-- Title & Description -->
-                        <div class="layout-stack spacing-xs w-full">
-                            <h2 class="text-title-3 font-grotesk text-[#ee4d2d]">Shopee</h2>
-                            <p class="text-body-small text-neutral-500">Official Shopee Mall • 100% Authentic</p>
-                        </div>
-                        
-                        <!-- Stats & Explore -->
-                        <div class="btn-explore w-full">
-                            <span class="text-caption text-neutral-600">48+ Produk Premium</span>
-                            <div class="flex items-center gap-2 text-[#ee4d2d]">
-                                <span class="text-overline-small">EXPLORE</span>
-                                <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
-                            </div>
-                        </div>
+                <h1 class="font-display font-black text-6xl md:text-8xl lg:text-9xl tracking-tighter mb-6 leading-none stagger-item" id="hero-title">
+                    ITS<span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 animate-gradient">BAD</span>
+                </h1>
+                
+                <p class="text-neutral-400 text-sm md:text-base max-w-lg mx-auto mb-4 stagger-item" id="hero-subtitle">
+                    Kurasi produk premium dari berbagai marketplace terpercaya. Temukan rekomendasi terbaik yang telah diverifikasi.
+                </p>
+                
+                <div class="flex items-center justify-center gap-4 text-[10px] font-bold tracking-[0.3em] uppercase text-neutral-600 stagger-item" id="hero-meta">
+                    <span>Shopee</span>
+                    <span class="w-1 h-1 rounded-full bg-neutral-700"></span>
+                    <span>TikTok</span>
+                    <span class="w-1 h-1 rounded-full bg-neutral-700"></span>
+                    <span>Tokopedia</span>
+                </div>
+            </div>
+
+            <!-- Platform Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl px-4 stagger-item" id="platform-grid">
+                <!-- Shopee -->
+                <button onclick="switchView('showcase', 'shopee')" class="platform-card group glass rounded-3xl p-8 text-left relative">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl group-hover:bg-orange-500/20 transition-all"></div>
+                    <div class="platform-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center mb-6 shadow-lg shadow-orange-500/20">
+                        <i data-lucide="shopping-bag" class="text-white w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-2xl mb-2 group-hover:text-orange-400 transition-colors">Shopee</h3>
+                    <p class="text-neutral-500 text-sm mb-6 line-clamp-2">Koleksi produk trending dengan rating terbaik dari Shopee Marketplace.</p>
+                    <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-400 group-hover:gap-4 transition-all">
+                        Explore Collection <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </div>
                 </button>
 
-                <!-- TikTok Card -->
-                <button onclick="switchView('showcase', 'tiktok')" class="platform-card items-start text-left">
-                    <div class="layout-stack spacing-lg w-full">
-                        <div class="flex items-start justify-between w-full">
-                            <div class="w-20 h-20 rounded-2xl bg-black border border-white/10 flex items-center justify-center">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
-                                    <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6c0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64c0 3.33 2.76 5.7 5.87 5.7c3.23 0 5.87-2.64 5.87-5.87V9.01c.9.58 1.96.91 3.06.91v-3.1c-.92 0-1.79-.3-2.5-.8z"/>
-                                </svg>
-                            </div>
-                            <span class="badge text-[#ff0050] border-[#ff0050]/30">#TRENDING</span>
-                        </div>
-                        
-                        <div class="layout-stack spacing-xs w-full">
-                            <h2 class="text-title-3 font-grotesk text-[#ff0050]">TikTok</h2>
-                            <p class="text-body-small text-neutral-500">TikTok Shop • Viral Products</p>
-                        </div>
-                        
-                        <div class="btn-explore w-full">
-                            <span class="text-caption text-neutral-600">Trending Now</span>
-                            <div class="flex items-center gap-2 text-[#ff0050]">
-                                <span class="text-overline-small">EXPLORE</span>
-                                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                            </div>
-                        </div>
+                <!-- TikTok -->
+                <button onclick="switchView('showcase', 'tiktok')" class="platform-card group glass rounded-3xl p-8 text-left relative">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-pink-500/10 rounded-full blur-3xl group-hover:bg-pink-500/20 transition-all"></div>
+                    <div class="platform-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-pink-500/20">
+                        <i data-lucide="video" class="text-white w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-2xl mb-2 group-hover:text-pink-400 transition-colors">TikTok Shop</h3>
+                    <p class="text-neutral-500 text-sm mb-6 line-clamp-2">Produk viral yang sedang hits di TikTok dengan harga kompetitif.</p>
+                    <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-pink-400 group-hover:gap-4 transition-all">
+                        Explore Collection <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </div>
                 </button>
 
-                <!-- Tokopedia Card -->
-                <button onclick="switchView('showcase', 'tokopedia')" class="platform-card items-start text-left">
-                    <div class="layout-stack spacing-lg w-full">
-                        <div class="flex items-start justify-between w-full">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#42b549] to-[#2e7d32] flex items-center justify-center">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
-                                    <circle cx="12" cy="12" r="4"/>
-                                </svg>
-                            </div>
-                            <span class="badge text-[#42b549] border-[#42b549]/30">POWER MERCHANT</span>
-                        </div>
-                        
-                        <div class="layout-stack spacing-xs w-full">
-                            <h2 class="text-title-3 font-grotesk text-[#42b549]">Tokopedia</h2>
-                            <p class="text-body-small text-neutral-500">Official Store • Power Merchant</p>
-                        </div>
-                        
-                        <div class="btn-explore w-full">
-                            <span class="text-caption text-neutral-600">100+ Produk</span>
-                            <div class="flex items-center gap-2 text-[#42b549]">
-                                <span class="text-overline-small">EXPLORE</span>
-                                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                            </div>
-                        </div>
+                <!-- Tokopedia -->
+                <button onclick="switchView('showcase', 'tokopedia')" class="platform-card group glass rounded-3xl p-8 text-left relative">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl group-hover:bg-green-500/20 transition-all"></div>
+                    <div class="platform-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-6 shadow-lg shadow-green-500/20">
+                        <i data-lucide="store" class="text-white w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-display font-bold text-2xl mb-2 group-hover:text-green-400 transition-colors">Tokopedia</h3>
+                    <p class="text-neutral-500 text-sm mb-6 line-clamp-2">Pilihan produk berkualitas dari merchant terpercaya Tokopedia.</p>
+                    <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-green-400 group-hover:gap-4 transition-all">
+                        Explore Collection <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </div>
                 </button>
             </div>
 
-            <!-- Stats Section - Center -->
-            <div class="grid grid-cols-3 gap-8 max-w-2xl mx-auto w-full pt-12 fade-up">
-                <div class="layout-stack items-center spacing-xs">
-                    <span class="text-heading-1 font-grotesk text-white">150+</span>
-                    <span class="text-overline-small text-neutral-600">Produk Premium</span>
+            <!-- Stats -->
+            <div class="mt-20 grid grid-cols-3 gap-8 max-w-2xl mx-auto text-center stagger-item" id="stats-section">
+                <div>
+                    <div class="font-display font-bold text-3xl text-white mb-1" id="stat-products">0</div>
+                    <div class="text-[10px] uppercase tracking-widest text-neutral-500">Products</div>
                 </div>
-                <div class="layout-stack items-center spacing-xs">
-                    <span class="text-heading-1 font-grotesk text-white">3</span>
-                    <span class="text-overline-small text-neutral-600">Platform</span>
+                <div>
+                    <div class="font-display font-bold text-3xl text-white mb-1">3</div>
+                    <div class="text-[10px] uppercase tracking-widest text-neutral-500">Platforms</div>
                 </div>
-                <div class="layout-stack items-center spacing-xs">
-                    <span class="text-heading-1 font-grotesk text-white">24/7</span>
-                    <span class="text-overline-small text-neutral-600">Update</span>
+                <div>
+                    <div class="font-display font-bold text-3xl text-white mb-1">24/7</div>
+                    <div class="text-[10px] uppercase tracking-widest text-neutral-500">Updated</div>
                 </div>
             </div>
+        </main>
 
-            <!-- Hidden Admin Button -->
-            <button onclick="toggleLoginModal(true)" class="fixed bottom-8 right-8 opacity-0 hover:opacity-30 transition-opacity">
-                <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
-                    <i data-lucide="lock" class="w-4 h-4"></i>
-                </div>
-            </button>
-        </div>
+        <!-- Footer -->
+        <footer class="px-6 py-8 text-center">
+            <p class="text-[10px] text-neutral-600 uppercase tracking-widest">© 2024 Itsbad Showcase. All rights reserved.</p>
+        </footer>
     </div>
 
-    <!-- Showcase View -->
+    <!-- Showcase Page -->
     <div id="showcase-view" class="hidden min-h-screen relative">
         <!-- Navigation -->
-        <nav class="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5 px-6 py-4">
-            <div class="max-w-7xl mx-auto flex items-center justify-between">
-                <button onclick="switchView('landing')" class="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors">
-                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                    <span class="text-overline-small">Kembali</span>
+        <nav class="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-white/5">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                <button onclick="switchView('landing')" class="flex items-center gap-3 text-neutral-400 hover:text-white transition-all group">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                        <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-widest hidden sm:block">Back</span>
                 </button>
-                
+
                 <div class="flex items-center gap-3">
-                    <span class="w-1.5 h-1.5 bg-purple-600 rounded-full animate-pulse"></span>
-                    <h2 id="platform-title-nav" class="text-heading-2 font-grotesk bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text"></h2>
-                    <span class="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></span>
+                    <div id="platform-indicator" class="w-3 h-3 rounded-full bg-purple-500"></div>
+                    <h2 id="platform-title-nav" class="font-display font-bold text-lg uppercase tracking-tight">Platform</h2>
                 </div>
-                
-                <div id="admin-indicator" class="hidden">
-                    <button onclick="logoutAdmin()" class="w-9 h-9 rounded-full bg-red-500/10 flex items-center justify-center hover:bg-red-500/20">
-                        <i data-lucide="log-out" class="w-4 h-4 text-red-500"></i>
+
+                <div class="flex items-center gap-3">
+                    <div id="admin-indicator" class="hidden flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/20 border border-purple-500/30">
+                        <i data-lucide="shield" class="w-3 h-3 text-purple-400"></i>
+                        <span class="text-[10px] font-bold uppercase text-purple-400">Admin</span>
+                    </div>
+                    <button onclick="logoutAdmin()" id="logout-btn" class="hidden w-10 h-10 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
                     </button>
+                    <div id="spacer-nav" class="w-10"></div>
                 </div>
-                
-                <div id="spacer-nav" class="w-20"></div>
             </div>
         </nav>
 
-        <main class="max-w-7xl mx-auto px-6 py-16">
+        <!-- Main Content -->
+        <main class="pt-24 pb-20 px-6 max-w-7xl mx-auto">
             <!-- Admin Panel -->
-            <div id="admin-panel" class="hidden bg-[#0c0c0c] border border-purple-600/20 rounded-3xl p-8 mb-16">
-                <div class="layout-stack spacing-2xl">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center">
-                                <i data-lucide="settings" class="w-6 h-6 text-white"></i>
-                            </div>
-                            <div class="layout-stack spacing-xs">
-                                <h3 id="form-label" class="text-heading-1 font-grotesk">Kelola Produk</h3>
-                                <p class="text-overline-small text-purple-500/70">Administrator Access</p>
-                            </div>
-                        </div>
-                        <button onclick="clearAllData()" class="flex items-center gap-2 px-5 py-3 bg-red-600/10 border border-red-500/30 rounded-xl text-overline-small text-red-500 hover:bg-red-600 hover:text-white transition-colors">
-                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                            Hapus Semua
+            <div id="admin-panel" class="hidden mb-12 glass rounded-3xl p-8 border border-purple-500/20 shadow-2xl shadow-purple-500/10">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <div>
+                        <h3 class="font-display font-bold text-2xl flex items-center gap-3 mb-1">
+                            <i data-lucide="settings" class="text-purple-400 w-6 h-6"></i>
+                            <span id="form-label">Product Manager</span>
+                        </h3>
+                        <p class="text-neutral-500 text-sm">Kelola produk untuk platform ini</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="resetForm()" class="px-4 py-2 rounded-xl bg-white/5 text-xs font-bold uppercase tracking-wider hover:bg-white/10 transition-colors border border-white/10">
+                            Reset
+                        </button>
+                        <button onclick="clearAllData()" class="px-4 py-2 rounded-xl bg-red-500/10 text-red-400 text-xs font-bold uppercase tracking-wider hover:bg-red-500 hover:text-white transition-all border border-red-500/20">
+                            Clear All
                         </button>
                     </div>
+                </div>
 
-                    <form id="product-form" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <input type="hidden" id="edit-id">
-                        
-                        <div class="layout-stack spacing-md">
-                            <input id="in-title" required placeholder="Nama Produk *" class="input-premium">
-                            <input id="in-link" required type="url" placeholder="Link Produk (URL) *" class="input-premium">
-                            <textarea id="in-desc" placeholder="Deskripsi produk..." class="input-premium h-24 resize-none"></textarea>
+                <form id="product-form" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <input type="hidden" id="edit-id">
+                    
+                    <div class="space-y-4">
+                        <div class="relative">
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-2 block">Product Name</label>
+                            <input id="in-title" required placeholder="Nama produk..." class="input-field w-full rounded-xl px-5 py-4 text-sm outline-none">
                         </div>
                         
-                        <div class="layout-stack spacing-md">
+                        <div class="relative">
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-2 block">Product URL</label>
+                            <input id="in-link" required type="url" placeholder="https://..." class="input-field w-full rounded-xl px-5 py-4 text-sm outline-none">
+                        </div>
+                        
+                        <div class="relative">
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-2 block">Description</label>
+                            <textarea id="in-desc" placeholder="Deskripsi singkat produk..." class="input-field w-full rounded-xl px-5 py-4 h-28 resize-none outline-none text-sm"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="relative">
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-2 block">Image</label>
                             <div class="flex gap-3">
-                                <input id="in-image" placeholder="URL Gambar" class="input-premium flex-1">
-                                <label class="w-12 h-12 bg-black/60 rounded-xl flex items-center justify-center hover:bg-black/80 cursor-pointer border border-white/5">
-                                    <i data-lucide="image" class="w-4 h-4 text-neutral-400"></i>
+                                <input id="in-image" placeholder="URL Gambar atau upload..." class="input-field flex-1 rounded-xl px-5 py-4 text-sm outline-none">
+                                <label class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors shrink-0">
+                                    <i data-lucide="upload" class="w-5 h-5 text-neutral-400"></i>
                                     <input type="file" id="file-input" class="hidden" accept="image/*">
                                 </label>
                             </div>
-                            <input id="in-order" type="number" required placeholder="Urutan Tampil *" class="input-premium">
-                            
-                            <button type="submit" id="btn-submit" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black py-4 rounded-xl text-overline-small hover:shadow-xl transition-all flex items-center justify-center gap-2">
-                                <i data-lucide="save" class="w-4 h-4"></i>
-                                Simpan ke Database
-                            </button>
                         </div>
-                    </form>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="relative">
+                                <label class="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-2 block">Sort Order</label>
+                                <input id="in-order" type="number" required placeholder="1" class="input-field w-full rounded-xl px-5 py-4 text-sm outline-none">
+                            </div>
+                            <div class="relative">
+                                <label class="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-2 block">Platform</label>
+                                <select id="in-platform" class="input-field w-full rounded-xl px-5 py-4 text-sm outline-none text-neutral-400">
+                                    <option value="shopee">Shopee</option>
+                                    <option value="tiktok">TikTok</option>
+                                    <option value="tokopedia">Tokopedia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="btn-submit" class="btn-primary w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-purple-500 hover:text-white transition-all uppercase tracking-widest text-xs shadow-xl shadow-purple-500/20 mt-2">
+                            Save to Database
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Filter & Search -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                <div class="flex items-center gap-4">
+                    <h3 class="font-display font-bold text-2xl">Products</h3>
+                    <span id="product-count" class="px-3 py-1 rounded-full bg-white/5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">0 items</span>
+                </div>
+                
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <div class="relative flex-1 sm:flex-initial">
+                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500"></i>
+                        <input type="text" id="search-input" placeholder="Cari produk..." class="input-field w-full sm:w-64 rounded-xl pl-11 pr-4 py-3 text-sm outline-none" oninput="filterProducts(this.value)">
+                    </div>
+                    <select id="sort-select" onchange="sortProducts(this.value)" class="input-field rounded-xl px-4 py-3 text-sm outline-none text-neutral-400 w-32">
+                        <option value="order">Urutan</option>
+                        <option value="newest">Terbaru</option>
+                        <option value="name">Nama</option>
+                    </select>
                 </div>
             </div>
 
             <!-- Product Grid -->
-            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
-            
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+
             <!-- Empty State -->
-            <div id="empty-msg" class="hidden py-32">
-                <div class="layout-stack items-center spacing-md">
-                    <div class="w-20 h-20 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
-                        <i data-lucide="package" class="w-8 h-8 text-neutral-600"></i>
-                    </div>
-                    <div class="layout-stack items-center spacing-xs">
-                        <p class="text-heading-3 text-neutral-600">Belum Ada Produk</p>
-                        <p class="text-overline-small text-neutral-700">Admin belum menambah produk rekomendasi</p>
-                    </div>
+            <div id="empty-msg" class="hidden py-32 text-center">
+                <div class="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="package-x" class="w-10 h-10 text-neutral-600"></i>
                 </div>
+                <h4 class="font-display font-bold text-xl mb-2">No Products Found</h4>
+                <p class="text-neutral-500 text-sm max-w-md mx-auto">Belum ada produk untuk platform ini. Login sebagai admin untuk menambahkan produk pertama.</p>
             </div>
         </main>
     </div>
 
     <!-- Login Modal -->
-    <div id="login-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/95 backdrop-blur-xl p-6">
-        <div class="w-full max-w-md bg-[#0c0c0c] border border-purple-600/30 rounded-3xl p-10">
-            <div class="layout-stack items-center spacing-2xl">
-                <div class="layout-stack items-center spacing-md">
-                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center rotate-12">
-                        <i data-lucide="lock" class="w-8 h-8 text-white"></i>
+    <div id="login-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 backdrop-blur-2xl p-6">
+        <div class="w-full max-w-md modal-enter">
+            <div class="glass rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-purple-500/30">
+                        <i data-lucide="shield-check" class="text-white w-8 h-8"></i>
                     </div>
-                    <div class="layout-stack items-center spacing-xs">
-                        <h3 class="text-heading-1 font-grotesk bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">Admin Access</h3>
-                        <p class="text-overline-small text-neutral-500">Masukkan kredensial</p>
-                    </div>
+                    <h3 class="font-display font-bold text-2xl mb-2">Admin Access</h3>
+                    <p class="text-neutral-500 text-sm">Masukkan kredensial untuk mengelola konten</p>
                 </div>
-                
-                <form id="login-form" class="layout-stack spacing-lg w-full">
-                    <input id="login-pass" type="password" placeholder="••••••" class="w-full bg-black/60 border border-white/5 rounded-2xl px-6 py-4 text-center text-2xl tracking-[0.5em] outline-none focus:border-purple-600" maxlength="6">
+
+                <form id="login-form" class="space-y-6">
+                    <div class="relative">
+                        <input id="login-pass" type="password" placeholder="••••••" class="input-field w-full rounded-xl px-6 py-5 text-center text-2xl tracking-[0.5em] font-bold outline-none" maxlength="6">
+                    </div>
                     
-                    <div class="flex gap-4">
-                        <button type="button" onclick="toggleLoginModal(false)" class="flex-1 py-4 bg-white/5 border border-white/10 rounded-xl text-overline-small hover:bg-white/10 transition-colors">
-                            Batal
+                    <div class="flex gap-3">
+                        <button type="button" onclick="toggleLoginModal(false)" class="flex-1 py-4 rounded-xl bg-white/5 text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-colors border border-white/10">
+                            Cancel
                         </button>
-                        <button type="submit" class="flex-[2] py-4 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl text-overline-small text-white hover:shadow-xl transition-all flex items-center justify-center gap-2">
-                            <i data-lucide="log-in" class="w-4 h-4"></i>
-                            Masuk
+                        <button type="submit" class="flex-[2] py-4 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-purple-500 hover:text-white transition-all shadow-lg">
+                            Authenticate
                         </button>
                     </div>
                 </form>
+
+                <div class="mt-6 text-center">
+                    <p class="text-[10px] text-neutral-600 uppercase tracking-widest">Protected Area • v2.0</p>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="flex items-center gap-3">
+            <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
+            <span id="toast-message" class="text-sm font-medium">Operation successful</span>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import {   
-            getFirestore,   
-            collection,   
-            addDoc,   
-            onSnapshot,   
-            doc,   
-            deleteDoc,   
-            updateDoc,   
-            getDocs,   
-            writeBatch   
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            onSnapshot, 
+            doc, 
+            deleteDoc, 
+            updateDoc, 
+            getDocs, 
+            writeBatch,
+            query,
+            orderBy 
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        /* ===============================
+           CONFIGURATION
+        ================================ */
         const firebaseConfig = {
             apiKey: "AIzaSyBb3HZbY7Tk6gWQagRSEOhi0dZVZ5mWFDA",
             authDomain: "showcaseitsbad.firebaseapp.com",
@@ -638,18 +721,38 @@
         let allProducts = [];
         let currentPlatform = null;
         let isEditing = false;
+        let searchQuery = '';
+        let sortMethod = 'order';
 
+        /* ===============================
+           INITIALIZATION
+        ================================ */
         async function init() {
             try {
+                // Animate loader progress
+                const progress = document.getElementById('loader-progress');
+                progress.style.width = '30%';
+                
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
+                
+                progress.style.width = '70%';
+                
                 const cred = await signInAnonymously(auth);
                 user = cred.user;
-                hideLoader();
-                setupRealtimeData();
+                
+                progress.style.width = '100%';
+                
+                setTimeout(() => {
+                    hideLoader();
+                    setupRealtimeData();
+                    initAnimations();
+                }, 500);
+                
             } catch (err) {
-                console.error(err);
+                console.error("Firebase Init Fail:", err);
+                showToast("Connection failed: " + err.message, "error");
                 hideLoader();
             }
         }
@@ -661,61 +764,169 @@
                 loader.classList.add('hidden');
                 document.getElementById('landing-view').classList.remove('hidden');
                 lucide.createIcons();
-            }, 700);
+            }, 500);
         }
 
-        function setupRealtimeData() {
-            if (!user) return;
-            const colRef = collection(db, 'products');
-            onSnapshot(colRef, (snapshot) => {
-                allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                if (currentPlatform) renderGrid();
+        function initAnimations() {
+            // GSAP Animations for landing page
+            gsap.to(".stagger-item", {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: "power3.out",
+                delay: 0.3
+            });
+
+            // Animate stats counter
+            animateCounter();
+        }
+
+        function animateCounter() {
+            const counter = { value: 0 };
+            gsap.to(counter, {
+                value: 150,
+                duration: 2,
+                ease: "power2.out",
+                onUpdate: () => {
+                    document.getElementById('stat-products').textContent = Math.floor(counter.value) + '+';
+                }
             });
         }
 
-        window.switchView = (view, platform = null) => {
-            document.getElementById('landing-view').classList.add('hidden');
-            document.getElementById('showcase-view').classList.add('hidden');
+        /* ===============================
+           DATABASE & REALTIME
+        ================================ */
+        function setupRealtimeData() {
+            if (!user) return;
+            
+            const colRef = collection(db, 'products');
+            const q = query(colRef, orderBy('sortOrder', 'asc'));
+            
+            onSnapshot(q, (snapshot) => {
+                allProducts = snapshot.docs.map(d => ({ 
+                    id: d.id, 
+                    ...d.data(),
+                    createdAt: d.data().createdAt || new Date().toISOString()
+                }));
+                
+                updateProductCount();
+                
+                if (currentPlatform) {
+                    renderGrid();
+                }
+            }, (err) => {
+                console.error("Snapshot error:", err);
+                showToast("Database sync error", "error");
+            });
+        }
 
+        function updateProductCount() {
+            const count = allProducts.length;
+            document.getElementById('stat-products').textContent = count;
+        }
+
+        /* ===============================
+           NAVIGATION & VIEWS
+        ================================ */
+        window.switchView = (view, platform = null) => {
+            const landing = document.getElementById('landing-view');
+            const showcase = document.getElementById('showcase-view');
+            
             if (view === 'landing') {
-                document.getElementById('landing-view').classList.remove('hidden');
-                currentPlatform = null;
+                // Animate out
+                gsap.to(showcase, {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.3,
+                    onComplete: () => {
+                        showcase.classList.add('hidden');
+                        landing.classList.remove('hidden');
+                        gsap.fromTo(landing, 
+                            { opacity: 0, y: -20 }, 
+                            { opacity: 1, y: 0, duration: 0.4 }
+                        );
+                        currentPlatform = null;
+                    }
+                });
             } else {
-                document.getElementById('showcase-view').classList.remove('hidden');
                 currentPlatform = platform;
                 
-                const titles = {
-                    'shopee': 'SHOPEE Showcase',
-                    'tiktok': 'TIKTOK-SHOP Showcase',
-                    'tokopedia': 'TOKOPEDIA Showcase'
+                // Update platform indicator color
+                const indicator = document.getElementById('platform-indicator');
+                const colors = {
+                    shopee: 'bg-orange-500',
+                    tiktok: 'bg-pink-500',
+                    tokopedia: 'bg-green-500'
                 };
+                indicator.className = `w-3 h-3 rounded-full ${colors[platform] || 'bg-purple-500'}`;
                 
-                document.getElementById('platform-title-nav').innerText = titles[platform] || platform.toUpperCase();
-                renderGrid();
+                document.getElementById('platform-title-nav').innerText = platform.charAt(0).toUpperCase() + platform.slice(1);
+                
+                // Set platform in form
+                document.getElementById('in-platform').value = platform;
+                
+                gsap.to(landing, {
+                    opacity: 0,
+                    y: -20,
+                    duration: 0.3,
+                    onComplete: () => {
+                        landing.classList.add('hidden');
+                        showcase.classList.remove('hidden');
+                        gsap.fromTo(showcase, 
+                            { opacity: 0, y: 20 }, 
+                            { opacity: 1, y: 0, duration: 0.4 }
+                        );
+                        renderGrid();
+                    }
+                });
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => lucide.createIcons(), 50);
+            
+            window.scrollTo(0, 0);
+            lucide.createIcons();
         };
 
         window.toggleLoginModal = (show) => {
             const modal = document.getElementById('login-modal');
-            modal.classList.toggle('hidden', !show);
-            if (show) modal.classList.add('flex');
-            else modal.classList.remove('flex');
+            if (show) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.getElementById('login-pass').focus();
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.getElementById('login-pass').value = '';
+            }
         };
 
+        /* ===============================
+           AUTHENTICATION
+        ================================ */
         document.getElementById('login-form').onsubmit = (e) => {
             e.preventDefault();
-            if (document.getElementById('login-pass').value === '110603') {
+            const pass = document.getElementById('login-pass').value;
+            
+            if (pass === '110603') {
                 isAdmin = true;
                 toggleLoginModal(false);
+                
+                // Show admin UI
                 document.getElementById('admin-panel').classList.remove('hidden');
                 document.getElementById('admin-indicator').classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
                 document.getElementById('spacer-nav').classList.add('hidden');
+                
+                showToast("Admin access granted");
                 renderGrid();
-                lucide.createIcons();
             } else {
-                alert("Password salah!");
+                // Shake animation for wrong password
+                const modal = document.querySelector('#login-modal > div');
+                gsap.to(modal, {
+                    x: [-10, 10, -10, 10, 0],
+                    duration: 0.4,
+                    ease: "power2.inOut"
+                });
+                showToast("Invalid credentials", "error");
             }
         };
 
@@ -723,12 +934,16 @@
             isAdmin = false;
             document.getElementById('admin-panel').classList.add('hidden');
             document.getElementById('admin-indicator').classList.add('hidden');
+            document.getElementById('logout-btn').classList.add('hidden');
             document.getElementById('spacer-nav').classList.remove('hidden');
             resetForm();
             renderGrid();
-            lucide.createIcons();
+            showToast("Logged out successfully");
         };
 
+        /* ===============================
+           CRUD OPERATIONS
+        ================================ */
         document.getElementById('product-form').onsubmit = async (e) => {
             e.preventDefault();
             if (!isAdmin) return;
@@ -737,9 +952,9 @@
                 title: document.getElementById('in-title').value,
                 description: document.getElementById('in-desc').value,
                 link: document.getElementById('in-link').value,
-                image: document.getElementById('in-image').value || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f',
+                image: document.getElementById('in-image').value,
                 sortOrder: parseInt(document.getElementById('in-order').value) || 0,
-                platform: currentPlatform,
+                platform: document.getElementById('in-platform').value,
                 updatedAt: new Date().toISOString()
             };
 
@@ -747,28 +962,29 @@
                 if (isEditing) {
                     const id = document.getElementById('edit-id').value;
                     await updateDoc(doc(db, 'products', id), payload);
-                    alert("Produk diperbarui!");
+                    showToast("Product updated successfully");
                 } else {
+                    payload.createdAt = new Date().toISOString();
                     await addDoc(collection(db, 'products'), payload);
-                    alert("Produk disimpan!");
+                    showToast("Product added successfully");
                 }
                 resetForm();
             } catch (err) {
-                alert("Gagal: " + err.message);
+                showToast("Error: " + err.message, "error");
             }
         };
 
         window.clearAllData = async () => {
             if (!isAdmin) return;
-            if (confirm("Hapus SEMUA produk?")) {
+            if (confirm("⚠️ PERINGATAN: Hapus seluruh produk dari database? Tindakan ini tidak dapat dibatalkan.")) {
                 try {
                     const snapshot = await getDocs(collection(db, 'products'));
                     const batch = writeBatch(db);
                     snapshot.docs.forEach(d => batch.delete(doc(db, 'products', d.id)));
                     await batch.commit();
-                    alert("Semua data dihapus!");
-                } catch (err) { 
-                    alert("Error: " + err.message); 
+                    showToast("All data cleared");
+                } catch (err) {
+                    showToast("Error: " + err.message, "error");
                 }
             }
         };
@@ -777,8 +993,9 @@
             isEditing = false;
             document.getElementById('product-form').reset();
             document.getElementById('edit-id').value = '';
-            document.getElementById('btn-submit').innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Simpan ke Database';
-            document.getElementById('form-label').innerHTML = 'Kelola Produk';
+            document.getElementById('btn-submit').innerHTML = 'Save to Database';
+            document.getElementById('form-label').innerText = 'Product Manager';
+            document.getElementById('in-platform').value = currentPlatform || 'shopee';
             lucide.createIcons();
         };
 
@@ -788,95 +1005,131 @@
             
             isEditing = true;
             document.getElementById('edit-id').value = p.id;
-            document.getElementById('in-title').value = p.title || '';
+            document.getElementById('in-title').value = p.title;
             document.getElementById('in-desc').value = p.description || '';
-            document.getElementById('in-link').value = p.link || '';
+            document.getElementById('in-link').value = p.link;
             document.getElementById('in-image').value = p.image || '';
             document.getElementById('in-order').value = p.sortOrder || 0;
+            document.getElementById('in-platform').value = p.platform;
             
-            document.getElementById('btn-submit').innerHTML = '<i data-lucide="edit-3" class="w-4 h-4"></i> Update Data';
-            document.getElementById('form-label').innerHTML = 'Edit Produk';
+            document.getElementById('btn-submit').innerText = 'Update Product';
+            document.getElementById('form-label').innerText = 'Edit Product';
+            
+            // Scroll to form
+            document.getElementById('admin-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
             lucide.createIcons();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.deleteProd = async (id) => {
-            if (confirm("Hapus produk ini?")) {
+            if (confirm("Hapus produk ini secara permanen?")) {
                 try {
                     await deleteDoc(doc(db, 'products', id));
-                } catch (e) { 
-                    alert("Error: " + e.message); 
+                    showToast("Product deleted");
+                } catch (e) {
+                    showToast("Error: " + e.message, "error");
                 }
             }
         };
 
+        // File upload to base64
         document.getElementById('file-input').onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                if (file.size > 5000000) { 
-                    alert("Maksimal 5MB"); 
-                    return; 
+                if (file.size > 1000000) {
+                    showToast("File too large (max 1MB)", "error");
+                    return;
                 }
                 const reader = new FileReader();
                 reader.onload = () => {
                     document.getElementById('in-image').value = reader.result;
+                    showToast("Image uploaded");
                 };
                 reader.readAsDataURL(file);
             }
         };
 
+        /* ===============================
+           SEARCH & FILTER
+        ================================ */
+        window.filterProducts = (query) => {
+            searchQuery = query.toLowerCase();
+            renderGrid();
+        };
+
+        window.sortProducts = (method) => {
+            sortMethod = method;
+            renderGrid();
+        };
+
+        /* ===============================
+           RENDERING
+        ================================ */
         function renderGrid() {
             const grid = document.getElementById('product-grid');
             const empty = document.getElementById('empty-msg');
+            const countBadge = document.getElementById('product-count');
             
-            const filtered = allProducts
-                .filter(p => p.platform === currentPlatform)
-                .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
-
+            let filtered = allProducts.filter(p => p.platform === currentPlatform);
+            
+            // Apply search
+            if (searchQuery) {
+                filtered = filtered.filter(p => 
+                    p.title.toLowerCase().includes(searchQuery) || 
+                    (p.description && p.description.toLowerCase().includes(searchQuery))
+                );
+            }
+            
+            // Apply sort
+            if (sortMethod === 'newest') {
+                filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            } else if (sortMethod === 'name') {
+                filtered.sort((a, b) => a.title.localeCompare(b.title));
+            } else {
+                filtered.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+            }
+            
+            countBadge.textContent = `${filtered.length} items`;
+            
             if (filtered.length === 0) {
                 grid.innerHTML = '';
                 empty.classList.remove('hidden');
                 return;
             }
-
+            
             empty.classList.add('hidden');
             
             grid.innerHTML = filtered.map((p, i) => `
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <img src="${p.image}" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                             alt="${p.title}"
-                             loading="lazy"
-                             onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                        <div class="absolute top-4 left-4">
-                            <span class="badge">
-                                <span class="w-1 h-1 bg-purple-600 rounded-full"></span>
-                                #${p.sortOrder || i + 1}
-                            </span>
+                <div class="product-card glass rounded-2xl overflow-hidden group" style="animation: fadeIn 0.5s ease-out ${i * 0.1}s both;">
+                    <div class="product-image-wrapper aspect-square relative bg-neutral-900">
+                        <img src="${p.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800'}" 
+                             class="product-image w-full h-full object-cover" 
+                             onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800'"
+                             loading="lazy">
+                        
+                        <div class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-sm border border-white/10 text-[10px] font-bold uppercase tracking-wider">
+                            #${p.sortOrder || i + 1}
                         </div>
+                        
                         ${isAdmin ? `
-                            <div class="absolute top-4 right-4 flex gap-2">
-                                <button onclick="startEdit('${p.id}')" class="w-9 h-9 bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-colors border border-white/20">
+                            <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="startEdit('${p.id}')" class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center hover:bg-purple-500 hover:text-white transition-all shadow-lg">
                                     <i data-lucide="edit-3" class="w-4 h-4"></i>
                                 </button>
-                                <button onclick="deleteProd('${p.id}')" class="w-9 h-9 bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors border border-white/20">
+                                <button onclick="deleteProd('${p.id}')" class="w-9 h-9 rounded-full bg-white text-black flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-lg">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
                         ` : ''}
                     </div>
                     
-                    <div class="product-content">
-                        <div class="layout-stack spacing-xs">
-                            <h4 class="text-heading-3 font-grotesk text-white line-clamp-1">${p.title}</h4>
-                            <p class="text-body-small text-neutral-500 line-clamp-2">${p.description || "Premium product recommendation from Itsbad."}</p>
-                        </div>
+                    <div class="p-6">
+                        <h4 class="font-display font-bold text-lg mb-2 line-clamp-1 group-hover:text-purple-400 transition-colors">${p.title}</h4>
+                        <p class="text-neutral-500 text-sm line-clamp-2 mb-4 leading-relaxed">${p.description || "Premium selection from Itsbad curation."}</p>
                         
-                        <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="btn-buy w-full">
-                            <span>Beli Sekarang</span>
-                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        <a href="${p.link}" target="_blank" rel="noopener noreferrer" 
+                           class="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-white/5 border border-white/10 text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all group/link">
+                            View Product
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform"></i>
                         </a>
                     </div>
                 </div>
@@ -885,6 +1138,35 @@
             lucide.createIcons();
         }
 
+        /* ===============================
+           UTILITIES
+        ================================ */
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            const icon = toast.querySelector('i');
+            
+            msgEl.textContent = message;
+            
+            if (type === 'error') {
+                icon.setAttribute('data-lucide', 'alert-circle');
+                icon.classList.remove('text-green-400');
+                icon.classList.add('text-red-400');
+            } else {
+                icon.setAttribute('data-lucide', 'check-circle');
+                icon.classList.remove('text-red-400');
+                icon.classList.add('text-green-400');
+            }
+            
+            lucide.createIcons();
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize
         init();
     </script>
 </body>
