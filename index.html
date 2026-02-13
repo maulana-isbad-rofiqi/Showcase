@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itsbad Showcase — Rekomendasi Produk</title>
+    <title>Itsbad Showcase — Fullstack Premium</title>
+    
+    <!-- Tailwind & Lucide -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@300;400;500;600;700&display=swap');
         
         * {
             margin: 0;
@@ -18,235 +28,233 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
+            background: #030303;
             color: #ffffff;
             overflow-x: hidden;
-            line-height: 1.5;
         }
 
-        .font-grotesk {
-            font-family: 'Space Grotesk', sans-serif;
+        .font-grotesk { font-family: 'Space Grotesk', sans-serif; }
+        .font-clash { font-family: 'Clash Display', sans-serif; }
+
+        /* ===== TYPOGRAPHY SYSTEM ===== */
+        .display-1 { font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.05em; }
+        .display-2 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; line-height: 1; letter-spacing: -0.03em; }
+        .heading-1 { font-size: 2rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+        .heading-2 { font-size: 1.5rem; font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; }
+        .heading-3 { font-size: 1.25rem; font-weight: 700; line-height: 1.3; }
+        .body-lg { font-size: 1rem; font-weight: 500; line-height: 1.6; color: #a3a3a3; }
+        .body-sm { font-size: 0.875rem; font-weight: 500; line-height: 1.5; color: #737373; }
+        .overline { font-size: 0.625rem; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; }
+        .caption { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; }
+
+        /* ===== SPACING SYSTEM ===== */
+        :root {
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            --space-4xl: 6rem;
         }
 
-        /* Typography System */
-        .text-title-1 {
-            font-size: 80px;
-            font-weight: 900;
-            line-height: 0.9;
-            letter-spacing: -0.05em;
+        /* ===== GLASS EFFECTS ===== */
+        .glass-dark {
+            background: rgba(3, 3, 3, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-bottom: 2px solid rgba(168, 85, 247, 0.2);
         }
 
-        .text-title-2 {
-            font-size: 48px;
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -0.03em;
-        }
-
-        .text-title-3 {
-            font-size: 32px;
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-
-        .text-heading-1 {
-            font-size: 24px;
-            font-weight: 800;
-            line-height: 1.2;
-            letter-spacing: -0.01em;
-        }
-
-        .text-heading-2 {
-            font-size: 20px;
-            font-weight: 800;
-            line-height: 1.3;
-            letter-spacing: -0.01em;
-        }
-
-        .text-heading-3 {
-            font-size: 18px;
-            font-weight: 700;
-            line-height: 1.4;
-        }
-
-        .text-body {
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 1.6;
-            color: #a3a3a3;
-        }
-
-        .text-body-small {
-            font-size: 12px;
-            font-weight: 500;
-            line-height: 1.5;
-            color: #737373;
-        }
-
-        .text-overline {
-            font-size: 10px;
-            font-weight: 800;
-            line-height: 1;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-        }
-
-        .text-overline-small {
-            font-size: 9px;
-            font-weight: 700;
-            line-height: 1;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-        }
-
-        .text-caption {
-            font-size: 11px;
-            font-weight: 600;
-            line-height: 1.4;
-            letter-spacing: 0.02em;
-        }
-
-        /* Spacing System */
-        .spacing-xs { gap: 4px; }
-        .spacing-sm { gap: 8px; }
-        .spacing-md { gap: 12px; }
-        .spacing-lg { gap: 16px; }
-        .spacing-xl { gap: 20px; }
-        .spacing-2xl { gap: 24px; }
-        .spacing-3xl { gap: 32px; }
-        .spacing-4xl { gap: 40px; }
-        .spacing-5xl { gap: 48px; }
-
-        /* Layout System */
-        .layout-stack {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .layout-stack-xs { gap: 4px; }
-        .layout-stack-sm { gap: 8px; }
-        .layout-stack-md { gap: 12px; }
-        .layout-stack-lg { gap: 16px; }
-        .layout-stack-xl { gap: 20px; }
-        .layout-stack-2xl { gap: 24px; }
-        .layout-stack-3xl { gap: 32px; }
-        .layout-stack-4xl { gap: 40px; }
-
-        /* Platform Cards */
-        .platform-card {
-            position: relative;
-            background: linear-gradient(145deg, rgba(18, 18, 18, 0.9), rgba(10, 10, 10, 0.95));
+        .glass-card {
+            background: linear-gradient(145deg, rgba(18, 18, 18, 0.9), rgba(8, 8, 8, 0.95));
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.02);
-            border-radius: 48px;
-            padding: 40px;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
+            border-bottom: 2px solid rgba(168, 85, 247, 0.1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .platform-card:hover {
-            border-color: rgba(168, 85, 247, 0.4);
-            transform: translateY(-8px);
-            box-shadow: 0 40px 80px -20px rgba(168, 85, 247, 0.2);
+        .glass-card:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            border-bottom: 2px solid #a855f7;
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 30px 60px -15px rgba(168, 85, 247, 0.2);
         }
 
-        /* Product Cards */
-        .product-card {
-            background: linear-gradient(145deg, rgba(18, 18, 18, 0.9), rgba(10, 10, 10, 0.95));
+        /* ===== PLATFORM CARDS ===== */
+        .platform-card {
+            position: relative;
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.98));
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.02);
+            border-radius: 48px;
+            padding: 2.5rem;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        .platform-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 0%, transparent 0%, rgba(168, 85, 247, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .platform-card:hover::after {
+            opacity: 1;
+        }
+
+        /* ===== LOGO CONTAINERS ===== */
+        .logo-container {
+            position: relative;
+            width: 88px;
+            height: 88px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 24px;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .platform-card:hover .logo-container {
+            transform: scale(1.1) rotate(5deg);
+            border-radius: 20px;
+        }
+
+        .logo-shopee { background: linear-gradient(145deg, #ee4d2d, #ff5a3c); }
+        .logo-tiktok { background: linear-gradient(145deg, #010101, #1a1a1a); border: 1px solid rgba(255,255,255,0.1); }
+        .logo-tokopedia { background: linear-gradient(145deg, #42b549, #3ca042); }
+
+        /* ===== PRODUCT CARDS ===== */
+        .product-card {
+            background: linear-gradient(145deg, rgba(18, 18, 18, 0.9), rgba(8, 8, 8, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-bottom: 2px solid rgba(168, 85, 247, 0.1);
             border-radius: 32px;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
         }
 
         .product-card:hover {
             border-color: rgba(168, 85, 247, 0.3);
+            border-bottom: 2px solid #a855f7;
             transform: translateY(-6px);
-            box-shadow: 0 30px 60px -15px rgba(168, 85, 247, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(168, 85, 247, 0.25);
         }
 
-        .product-image-container {
+        .product-image {
             position: relative;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 1/1;
             overflow: hidden;
         }
 
-        .product-content {
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Buttons */
-        .btn-explore {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 24px;
+        .product-card:hover .product-image img {
+            transform: scale(1.08);
         }
 
-        .btn-buy {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px;
-            padding: 16px 20px;
+        .product-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.2), transparent);
+            opacity: 0.8;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-primary {
+            background: linear-gradient(90deg, #a855f7, #3b82f6);
+            border: none;
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            font-weight: 800;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: white;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: all 0.3s ease;
+            gap: 0.5rem;
         }
 
-        .btn-buy:hover {
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -10px rgba(168, 85, 247, 0.4);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 2px solid rgba(168, 85, 247, 0.2);
+            border-radius: 16px;
+            padding: 0.875rem 1.25rem;
+            font-weight: 700;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline:hover {
             background: white;
             color: black;
+            border-color: white;
             transform: translateY(-2px);
         }
 
-        /* Badges */
-        .badge {
+        /* ===== BADGES ===== */
+        .badge-premium {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 2px solid #a855f7;
             border-radius: 100px;
-            font-size: 9px;
+            font-size: 0.625rem;
             font-weight: 800;
             letter-spacing: 0.15em;
             text-transform: uppercase;
         }
 
-        /* Input Fields */
+        /* ===== INPUT FIELDS ===== */
         .input-premium {
             background: rgba(0, 0, 0, 0.6) !important;
-            border: 1px solid rgba(255, 255, 255, 0.03) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.03) !important;
+            border-bottom: 2px solid rgba(168, 85, 247, 0.2) !important;
             border-radius: 16px !important;
-            padding: 16px 20px !important;
-            font-size: 14px !important;
+            padding: 1rem 1.25rem !important;
             color: white !important;
+            font-size: 0.875rem !important;
+            transition: all 0.3s ease !important;
             width: 100%;
-            transition: all 0.3s ease;
         }
 
         .input-premium:focus {
             border-color: #a855f7 !important;
-            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1) !important;
+            border-bottom-width: 2px !important;
+            box-shadow: 0 10px 20px -10px rgba(168, 85, 247, 0.2) !important;
             background: rgba(20, 20, 20, 0.8) !important;
+            outline: none;
         }
 
         .input-premium::placeholder {
@@ -254,354 +262,391 @@
             font-weight: 400;
         }
 
-        /* Premium Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: #a855f7;
-            border-radius: 100px;
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #9333ea;
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-pulse-slow { animation: pulse 4s ease-in-out infinite; }
+        .gradient-text {
+            background: linear-gradient(270deg, #a855f7, #3b82f6, #a855f7, #3b82f6);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 6s ease infinite;
         }
 
-        /* Animations */
-        .fade-up {
-            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #030303; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, #a855f7, #3b82f6);
+            border-radius: 100px; 
         }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #9333ea, #2563eb); }
 
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Text Alignment Utilities */
-        .text-left { text-align: left; }
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        
-        .items-start { align-items: flex-start; }
-        .items-center { align-items: center; }
-        .items-end { align-items: flex-end; }
-        
-        .justify-start { justify-content: flex-start; }
-        .justify-center { justify-content: center; }
-        .justify-between { justify-content: space-between; }
-        .justify-end { justify-content: flex-end; }
-
-        /* Line Clamp */
-        .line-clamp-1 {
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        /* Grid Pattern */
-        .grid-pattern {
-            background-image: linear-gradient(rgba(168, 85, 247, 0.02) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(168, 85, 247, 0.02) 1px, transparent 1px);
+        /* ===== GRID PATTERN ===== */
+        .grid-overlay {
+            background-image: 
+                linear-gradient(rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
         }
     </style>
 </head>
-<body class="antialiased relative">
+<body class="relative antialiased">
 
-    <!-- Dynamic Background -->
-    <div class="fixed inset-0 pointer-events-none z-[-2]">
-        <div class="absolute inset-0 bg-[#0a0a0a]"></div>
-        <div class="absolute inset-0 grid-pattern opacity-30"></div>
-        <div class="absolute top-[-10%] left-[-5%] w-[50%] h-[50%] bg-purple-600/10 blur-[150px] rounded-full"></div>
-        <div class="absolute bottom-[-10%] right-[-5%] w-[50%] h-[50%] bg-blue-600/10 blur-[150px] rounded-full"></div>
+    <!-- ===== DYNAMIC BACKGROUND ===== -->
+    <div class="fixed inset-0 pointer-events-none z-[-1]">
+        <div class="absolute inset-0 bg-[#030303]"></div>
+        <div class="absolute inset-0 grid-overlay opacity-40"></div>
+        
+        <!-- Animated Orbs -->
+        <div class="absolute top-[-10%] left-[-5%] w-[60%] h-[60%] bg-purple-600/10 blur-[150px] rounded-full animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] right-[-5%] w-[60%] h-[60%] bg-blue-600/10 blur-[150px] rounded-full animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <div class="absolute top-[40%] right-[15%] w-[40%] h-[40%] bg-pink-600/10 blur-[120px] rounded-full animate-pulse-slow" style="animation-delay: 4s;"></div>
+        <div class="absolute bottom-[30%] left-[15%] w-[45%] h-[45%] bg-indigo-600/10 blur-[120px] rounded-full animate-pulse-slow" style="animation-delay: 6s;"></div>
     </div>
 
-    <!-- Loader -->
-    <div id="main-loader" class="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center transition-all duration-700">
-        <div class="layout-stack items-center spacing-2xl">
-            <div class="w-12 h-12 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-            <div class="layout-stack items-center spacing-xs">
-                <p class="text-overline-small text-white/40">Sinkronisasi Database</p>
-                <p class="text-overline-small text-white/20">Itsbad Showcase</p>
+    <!-- ===== PREMIUM LOADER ===== -->
+    <div id="main-loader" class="fixed inset-0 z-[100] bg-[#030303] flex items-center justify-center transition-all duration-1000">
+        <div class="flex flex-col items-center gap-8">
+            <div class="relative">
+                <div class="w-20 h-20 border-4 border-purple-600/20 border-t-purple-600 border-r-blue-600 rounded-full animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-3 h-3 bg-white rounded-full"></div>
+                </div>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <p class="text-[0.625rem] font-black tracking-[0.4em] uppercase text-white/40">Initializing System</p>
+                <div class="flex gap-1">
+                    <span class="w-1 h-1 bg-purple-600 rounded-full animate-pulse"></span>
+                    <span class="w-1 h-1 bg-blue-600 rounded-full animate-pulse" style="animation-delay: 0.2s;"></span>
+                    <span class="w-1 h-1 bg-purple-600 rounded-full animate-pulse" style="animation-delay: 0.4s;"></span>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Landing View -->
+    <!-- ===== LANDING VIEW ===== -->
     <div id="landing-view" class="hidden min-h-screen flex flex-col items-center px-6 py-20 relative">
-        <div class="max-w-7xl w-full layout-stack spacing-5xl">
+        <div class="max-w-7xl w-full flex flex-col gap-24">
             
-            <!-- Premium Badge - Center -->
-            <div class="flex justify-center fade-up">
-                <div class="badge">
-                    <span class="w-1.5 h-1.5 bg-purple-600 rounded-full"></span>
-                    <span class="text-white/80">Premium Product Recommendations</span>
-                    <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
+            <!-- Header Badge -->
+            <div class="flex justify-center">
+                <div class="badge-premium">
+                    <span class="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></span>
+                    <span class="text-white/90">FULLSTACK PREMIUM SYSTEM</span>
+                    <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
                 </div>
             </div>
 
-            <!-- Hero Section - Center -->
-            <div class="layout-stack items-center spacing-lg fade-up">
-                <h1 class="text-title-1 font-grotesk text-center">
-                    <span class="bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">ITS</span>
-                    <span class="text-white">BAD.</span>
+            <!-- Hero Section -->
+            <div class="flex flex-col items-center gap-8">
+                <h1 class="display-1 font-clash text-center">
+                    <span class="gradient-text">ITS</span>
+                    <span class="text-white relative">
+                        BAD.
+                        <span class="absolute -top-6 -right-6 text-xs font-normal opacity-30">™</span>
+                    </span>
                 </h1>
-                <div class="flex justify-center gap-2">
-                    <div class="w-12 h-[2px] bg-gradient-to-r from-transparent via-purple-600 to-transparent"></div>
-                    <div class="w-12 h-[2px] bg-gradient-to-r from-transparent via-blue-600 to-transparent"></div>
+                <div class="flex justify-center gap-3">
+                    <div class="w-16 h-[2px] bg-gradient-to-r from-transparent via-purple-600 to-transparent"></div>
+                    <div class="w-16 h-[2px] bg-gradient-to-r from-transparent via-blue-600 to-transparent"></div>
                 </div>
-                <p class="text-overline text-neutral-600">Curated Selection • 2026</p>
+                <p class="overline text-neutral-600">Curated Premium Products • 2026</p>
             </div>
 
-            <!-- Platform Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 fade-up">
+            <!-- ===== PLATFORM CARDS WITH OFFICIAL LOGOS ===== -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 
-                <!-- Shopee Card -->
-                <button onclick="switchView('showcase', 'shopee')" class="platform-card items-start text-left">
-                    <!-- Logo & Badge -->
-                    <div class="layout-stack spacing-lg w-full">
-                        <div class="flex items-start justify-between w-full">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#ee4d2d] to-[#fe6433] flex items-center justify-center">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                <!-- SHOPEE CARD - OFFICIAL LOGO -->
+                <div onclick="switchView('showcase', 'shopee')" class="platform-card group cursor-pointer">
+                    <div class="flex flex-col gap-8">
+                        
+                        <!-- Header with Official Shopee Logo -->
+                        <div class="flex items-start justify-between">
+                            <div class="logo-container logo-shopee shadow-2xl">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
                                     <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm2 14h-4v-1h4v1zm0-3h-4v-1h4v1zm-5-6c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm6 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
                                 </svg>
                             </div>
-                            <span class="badge text-[#ee4d2d] border-[#ee4d2d]/30">#1 E-COMMERCE</span>
+                            <div class="badge-premium border-[#ee4d2d]/30">
+                                <span class="w-1.5 h-1.5 bg-[#ee4d2d] rounded-full"></span>
+                                <span class="text-[#ee4d2d]">OFFICIAL</span>
+                            </div>
                         </div>
                         
-                        <!-- Title & Description -->
-                        <div class="layout-stack spacing-xs w-full">
-                            <h2 class="text-title-3 font-grotesk text-[#ee4d2d]">Shopee</h2>
-                            <p class="text-body-small text-neutral-500">Official Shopee Mall • 100% Authentic</p>
+                        <!-- Content -->
+                        <div class="flex flex-col gap-2">
+                            <h2 class="text-4xl font-black font-grotesk text-[#ee4d2d]">Shopee</h2>
+                            <p class="body-sm text-neutral-500">Official Shopee Mall • 100% Authentic • Free Shipping</p>
                         </div>
                         
-                        <!-- Stats & Explore -->
-                        <div class="btn-explore w-full">
-                            <span class="text-caption text-neutral-600">48+ Produk Premium</span>
-                            <div class="flex items-center gap-2 text-[#ee4d2d]">
-                                <span class="text-overline-small">EXPLORE</span>
-                                <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+                        <!-- Stats & CTA -->
+                        <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                            <span class="caption text-neutral-600">48+ Premium Products</span>
+                            <div class="flex items-center gap-2 text-[#ee4d2d] group-hover:gap-4 transition-all">
+                                <span class="overline">EXPLORE</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                             </div>
                         </div>
                     </div>
-                </button>
+                </div>
 
-                <!-- TikTok Card -->
-                <button onclick="switchView('showcase', 'tiktok')" class="platform-card items-start text-left">
-                    <div class="layout-stack spacing-lg w-full">
-                        <div class="flex items-start justify-between w-full">
-                            <div class="w-20 h-20 rounded-2xl bg-black border border-white/10 flex items-center justify-center">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                <!-- TIKTOK CARD - OFFICIAL LOGO -->
+                <div onclick="switchView('showcase', 'tiktok')" class="platform-card group cursor-pointer">
+                    <div class="flex flex-col gap-8">
+                        
+                        <!-- Header with Official TikTok Logo -->
+                        <div class="flex items-start justify-between">
+                            <div class="logo-container logo-tiktok shadow-2xl">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
                                     <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6c0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64c0 3.33 2.76 5.7 5.87 5.7c3.23 0 5.87-2.64 5.87-5.87V9.01c.9.58 1.96.91 3.06.91v-3.1c-.92 0-1.79-.3-2.5-.8z"/>
                                 </svg>
                             </div>
-                            <span class="badge text-[#ff0050] border-[#ff0050]/30">#TRENDING</span>
+                            <div class="badge-premium border-[#ff0050]/30">
+                                <span class="w-1.5 h-1.5 bg-[#ff0050] rounded-full"></span>
+                                <span class="text-[#ff0050]">#TRENDING</span>
+                            </div>
                         </div>
                         
-                        <div class="layout-stack spacing-xs w-full">
-                            <h2 class="text-title-3 font-grotesk text-[#ff0050]">TikTok</h2>
-                            <p class="text-body-small text-neutral-500">TikTok Shop • Viral Products</p>
+                        <!-- Content -->
+                        <div class="flex flex-col gap-2">
+                            <h2 class="text-4xl font-black font-grotesk text-[#ff0050]">TikTok</h2>
+                            <p class="body-sm text-neutral-500">TikTok Shop • Viral Products • Live Shopping</p>
                         </div>
                         
-                        <div class="btn-explore w-full">
-                            <span class="text-caption text-neutral-600">Trending Now</span>
-                            <div class="flex items-center gap-2 text-[#ff0050]">
-                                <span class="text-overline-small">EXPLORE</span>
-                                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        <!-- Stats & CTA -->
+                        <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                            <span class="caption text-neutral-600">Trending Now</span>
+                            <div class="flex items-center gap-2 text-[#ff0050] group-hover:gap-4 transition-all">
+                                <span class="overline">EXPLORE</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                             </div>
                         </div>
                     </div>
-                </button>
+                </div>
 
-                <!-- Tokopedia Card -->
-                <button onclick="switchView('showcase', 'tokopedia')" class="platform-card items-start text-left">
-                    <div class="layout-stack spacing-lg w-full">
-                        <div class="flex items-start justify-between w-full">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#42b549] to-[#2e7d32] flex items-center justify-center">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                <!-- TOKOPEDIA CARD - OFFICIAL LOGO -->
+                <div onclick="switchView('showcase', 'tokopedia')" class="platform-card group cursor-pointer">
+                    <div class="flex flex-col gap-8">
+                        
+                        <!-- Header with Official Tokopedia Logo -->
+                        <div class="flex items-start justify-between">
+                            <div class="logo-container logo-tokopedia shadow-2xl">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
                                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
                                     <circle cx="12" cy="12" r="4"/>
                                 </svg>
                             </div>
-                            <span class="badge text-[#42b549] border-[#42b549]/30">POWER MERCHANT</span>
+                            <div class="badge-premium border-[#42b549]/30">
+                                <span class="w-1.5 h-1.5 bg-[#42b549] rounded-full"></span>
+                                <span class="text-[#42b549]">POWER MERCHANT</span>
+                            </div>
                         </div>
                         
-                        <div class="layout-stack spacing-xs w-full">
-                            <h2 class="text-title-3 font-grotesk text-[#42b549]">Tokopedia</h2>
-                            <p class="text-body-small text-neutral-500">Official Store • Power Merchant</p>
+                        <!-- Content -->
+                        <div class="flex flex-col gap-2">
+                            <h2 class="text-4xl font-black font-grotesk text-[#42b549]">Tokopedia</h2>
+                            <p class="body-sm text-neutral-500">Official Store • Power Merchant • Trusted</p>
                         </div>
                         
-                        <div class="btn-explore w-full">
-                            <span class="text-caption text-neutral-600">100+ Produk</span>
-                            <div class="flex items-center gap-2 text-[#42b549]">
-                                <span class="text-overline-small">EXPLORE</span>
-                                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        <!-- Stats & CTA -->
+                        <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                            <span class="caption text-neutral-600">100+ Premium Products</span>
+                            <div class="flex items-center gap-2 text-[#42b549] group-hover:gap-4 transition-all">
+                                <span class="overline">EXPLORE</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                             </div>
                         </div>
                     </div>
-                </button>
+                </div>
             </div>
 
-            <!-- Stats Section - Center -->
-            <div class="grid grid-cols-3 gap-8 max-w-2xl mx-auto w-full pt-12 fade-up">
-                <div class="layout-stack items-center spacing-xs">
-                    <span class="text-heading-1 font-grotesk text-white">150+</span>
-                    <span class="text-overline-small text-neutral-600">Produk Premium</span>
+            <!-- Stats Section -->
+            <div class="grid grid-cols-3 gap-8 max-w-2xl mx-auto w-full pt-12">
+                <div class="flex flex-col items-center gap-2">
+                    <span class="heading-2 font-grotesk gradient-text">150+</span>
+                    <span class="overline text-neutral-600">Premium Products</span>
                 </div>
-                <div class="layout-stack items-center spacing-xs">
-                    <span class="text-heading-1 font-grotesk text-white">3</span>
-                    <span class="text-overline-small text-neutral-600">Platform</span>
+                <div class="flex flex-col items-center gap-2">
+                    <span class="heading-2 font-grotesk gradient-text">3</span>
+                    <span class="overline text-neutral-600">Platforms</span>
                 </div>
-                <div class="layout-stack items-center spacing-xs">
-                    <span class="text-heading-1 font-grotesk text-white">24/7</span>
-                    <span class="text-overline-small text-neutral-600">Update</span>
+                <div class="flex flex-col items-center gap-2">
+                    <span class="heading-2 font-grotesk gradient-text">24/7</span>
+                    <span class="overline text-neutral-600">Updates</span>
                 </div>
             </div>
 
             <!-- Hidden Admin Button -->
-            <button onclick="toggleLoginModal(true)" class="fixed bottom-8 right-8 opacity-0 hover:opacity-30 transition-opacity">
-                <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
-                    <i data-lucide="lock" class="w-4 h-4"></i>
+            <button onclick="toggleLoginModal(true)" class="fixed bottom-8 right-8 opacity-0 hover:opacity-40 transition-opacity">
+                <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-lg">
+                    <i data-lucide="lock" class="w-5 h-5 text-white/50"></i>
                 </div>
             </button>
         </div>
     </div>
 
-    <!-- Showcase View -->
+    <!-- ===== SHOWCASE VIEW ===== -->
     <div id="showcase-view" class="hidden min-h-screen relative">
-        <!-- Navigation -->
-        <nav class="sticky top-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5 px-6 py-4">
+        
+        <!-- Premium Navigation -->
+        <nav class="glass-dark sticky top-0 z-50 px-6 py-5">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
-                <button onclick="switchView('landing')" class="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors">
-                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                    <span class="text-overline-small">Kembali</span>
+                <button onclick="switchView('landing')" class="flex items-center gap-3 text-neutral-400 hover:text-white transition-all group">
+                    <div class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10">
+                        <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
+                    </div>
+                    <span class="overline">Back</span>
                 </button>
                 
-                <div class="flex items-center gap-3">
-                    <span class="w-1.5 h-1.5 bg-purple-600 rounded-full animate-pulse"></span>
-                    <h2 id="platform-title-nav" class="text-heading-2 font-grotesk bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text"></h2>
-                    <span class="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></span>
+                <div class="flex items-center gap-4">
+                    <span class="w-2 h-2 bg-purple-600 rounded-full animate-pulse"></span>
+                    <h2 id="platform-title-nav" class="heading-3 font-grotesk gradient-text"></h2>
+                    <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
                 </div>
                 
                 <div id="admin-indicator" class="hidden">
-                    <button onclick="logoutAdmin()" class="w-9 h-9 rounded-full bg-red-500/10 flex items-center justify-center hover:bg-red-500/20">
+                    <button onclick="logoutAdmin()" class="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center hover:bg-red-500/20 transition-all">
                         <i data-lucide="log-out" class="w-4 h-4 text-red-500"></i>
                     </button>
                 </div>
                 
-                <div id="spacer-nav" class="w-20"></div>
+                <div id="spacer-nav" class="w-28"></div>
             </div>
         </nav>
 
         <main class="max-w-7xl mx-auto px-6 py-16">
-            <!-- Admin Panel -->
-            <div id="admin-panel" class="hidden bg-[#0c0c0c] border border-purple-600/20 rounded-3xl p-8 mb-16">
-                <div class="layout-stack spacing-2xl">
+            
+            <!-- ===== ADMIN PANEL FULLSTACK ===== -->
+            <div id="admin-panel" class="hidden glass-card p-10 mb-20 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-purple-600/5 rounded-full blur-[100px]"></div>
+                
+                <div class="relative z-10 flex flex-col gap-10">
+                    
+                    <!-- Admin Header -->
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center">
-                                <i data-lucide="settings" class="w-6 h-6 text-white"></i>
+                        <div class="flex items-center gap-6">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center shadow-2xl">
+                                <i data-lucide="settings" class="w-8 h-8 text-white"></i>
                             </div>
-                            <div class="layout-stack spacing-xs">
-                                <h3 id="form-label" class="text-heading-1 font-grotesk">Kelola Produk</h3>
-                                <p class="text-overline-small text-purple-500/70">Administrator Access</p>
+                            <div class="flex flex-col gap-1">
+                                <h3 id="form-label" class="heading-2 font-grotesk">Product Management</h3>
+                                <p class="caption text-purple-500/70">Fullstack Database Control • Real-time Sync</p>
                             </div>
                         </div>
-                        <button onclick="clearAllData()" class="flex items-center gap-2 px-5 py-3 bg-red-600/10 border border-red-500/30 rounded-xl text-overline-small text-red-500 hover:bg-red-600 hover:text-white transition-colors">
-                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                            Hapus Semua
+                        
+                        <button onclick="clearAllData()" class="flex items-center gap-2 px-6 py-3 bg-red-600/10 border border-red-500/30 rounded-2xl hover:bg-red-600 hover:text-white transition-all group">
+                            <i data-lucide="trash-2" class="w-4 h-4 text-red-500 group-hover:text-white"></i>
+                            <span class="caption font-black text-red-500 group-hover:text-white">Delete All</span>
                         </button>
                     </div>
 
-                    <form id="product-form" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Form Grid -->
+                    <form id="product-form" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <input type="hidden" id="edit-id">
                         
-                        <div class="layout-stack spacing-md">
-                            <input id="in-title" required placeholder="Nama Produk *" class="input-premium">
-                            <input id="in-link" required type="url" placeholder="Link Produk (URL) *" class="input-premium">
-                            <textarea id="in-desc" placeholder="Deskripsi produk..." class="input-premium h-24 resize-none"></textarea>
+                        <div class="flex flex-col gap-5">
+                            <input id="in-title" required placeholder="Product Name *" class="input-premium">
+                            <input id="in-link" required type="url" placeholder="Product URL *" class="input-premium">
+                            <textarea id="in-desc" placeholder="Product Description..." class="input-premium h-32 resize-none"></textarea>
                         </div>
                         
-                        <div class="layout-stack spacing-md">
+                        <div class="flex flex-col gap-5">
                             <div class="flex gap-3">
-                                <input id="in-image" placeholder="URL Gambar" class="input-premium flex-1">
-                                <label class="w-12 h-12 bg-black/60 rounded-xl flex items-center justify-center hover:bg-black/80 cursor-pointer border border-white/5">
-                                    <i data-lucide="image" class="w-4 h-4 text-neutral-400"></i>
+                                <input id="in-image" placeholder="Image URL" class="input-premium flex-1">
+                                <label class="w-14 h-14 bg-black/60 rounded-2xl flex items-center justify-center hover:bg-black/80 cursor-pointer border border-white/5 border-b-purple-600/20">
+                                    <i data-lucide="image" class="w-5 h-5 text-neutral-400"></i>
                                     <input type="file" id="file-input" class="hidden" accept="image/*">
                                 </label>
                             </div>
-                            <input id="in-order" type="number" required placeholder="Urutan Tampil *" class="input-premium">
+                            <input id="in-order" type="number" required placeholder="Sort Order *" class="input-premium">
                             
-                            <button type="submit" id="btn-submit" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black py-4 rounded-xl text-overline-small hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                            <button type="submit" id="btn-submit" class="btn-primary w-full mt-2">
                                 <i data-lucide="save" class="w-4 h-4"></i>
-                                Simpan ke Database
+                                Save to Database
                             </button>
                         </div>
                     </form>
+
+                    <!-- Real-time Status -->
+                    <div class="flex items-center gap-4 pt-4 border-t border-white/5">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            <span class="caption text-neutral-500">Firebase Connected</span>
+                        </div>
+                        <div class="w-px h-4 bg-white/10"></div>
+                        <span class="caption text-neutral-500">Real-time Sync Active</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Product Grid -->
+            <!-- ===== PRODUCT GRID ===== -->
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
             
-            <!-- Empty State -->
+            <!-- ===== EMPTY STATE ===== -->
             <div id="empty-msg" class="hidden py-32">
-                <div class="layout-stack items-center spacing-md">
-                    <div class="w-20 h-20 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
-                        <i data-lucide="package" class="w-8 h-8 text-neutral-600"></i>
+                <div class="flex flex-col items-center gap-6">
+                    <div class="w-24 h-24 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center">
+                        <i data-lucide="package" class="w-10 h-10 text-neutral-600"></i>
                     </div>
-                    <div class="layout-stack items-center spacing-xs">
-                        <p class="text-heading-3 text-neutral-600">Belum Ada Produk</p>
-                        <p class="text-overline-small text-neutral-700">Tambahkan produk melalui admin panel</p>
+                    <div class="flex flex-col items-center gap-2">
+                        <p class="heading-3 text-neutral-600">No Products Found</p>
+                        <p class="caption text-neutral-700">Add your first product using the admin panel</p>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Login Modal -->
-    <div id="login-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/95 backdrop-blur-xl p-6">
-        <div class="w-full max-w-md bg-[#0c0c0c] border border-purple-600/30 rounded-3xl p-10">
-            <div class="layout-stack items-center spacing-2xl">
-                <div class="layout-stack items-center spacing-md">
-                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center rotate-12">
-                        <i data-lucide="lock" class="w-8 h-8 text-white"></i>
+    <!-- ===== LOGIN MODAL PREMIUM ===== -->
+    <div id="login-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/95 backdrop-blur-2xl p-6">
+        <div class="w-full max-w-md glass-card p-12 rounded-[40px] relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-purple-600/10 rounded-full blur-[80px]"></div>
+            
+            <div class="relative z-10 flex flex-col items-center gap-8">
+                
+                <!-- Icon -->
+                <div class="relative">
+                    <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center rotate-12 shadow-2xl">
+                        <i data-lucide="lock" class="w-10 h-10 text-white"></i>
                     </div>
-                    <div class="layout-stack items-center spacing-xs">
-                        <h3 class="text-heading-1 font-grotesk bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">Admin Access</h3>
-                        <p class="text-overline-small text-neutral-500">Masukkan kredensial</p>
-                    </div>
+                    <div class="absolute inset-0 bg-purple-600/30 rounded-full blur-[50px] -z-10"></div>
                 </div>
                 
-                <form id="login-form" class="layout-stack spacing-lg w-full">
-                    <input id="login-pass" type="password" placeholder="••••••" class="w-full bg-black/60 border border-white/5 rounded-2xl px-6 py-4 text-center text-2xl tracking-[0.5em] outline-none focus:border-purple-600" maxlength="6">
+                <!-- Text -->
+                <div class="flex flex-col items-center gap-2">
+                    <h3 class="heading-1 font-grotesk gradient-text">Admin Access</h3>
+                    <p class="caption text-neutral-500">Enter your credentials</p>
+                </div>
+                
+                <!-- Form -->
+                <form id="login-form" class="flex flex-col gap-6 w-full">
+                    <input id="login-pass" type="password" placeholder="••••••" class="w-full bg-black/60 border border-white/5 border-b-purple-600/30 rounded-2xl px-6 py-5 text-center text-3xl tracking-[0.5em] outline-none focus:border-purple-600" maxlength="6">
                     
-                    <div class="flex gap-4">
-                        <button type="button" onclick="toggleLoginModal(false)" class="flex-1 py-4 bg-white/5 border border-white/10 rounded-xl text-overline-small hover:bg-white/10 transition-colors">
-                            Batal
+                    <div class="flex gap-4 pt-4">
+                        <button type="button" onclick="toggleLoginModal(false)" class="flex-1 py-4 bg-white/5 border border-white/10 rounded-xl caption font-bold hover:bg-white/10 transition-all">
+                            Cancel
                         </button>
-                        <button type="submit" class="flex-[2] py-4 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl text-overline-small text-white hover:shadow-xl transition-all flex items-center justify-center gap-2">
+                        <button type="submit" class="flex-[2] py-4 btn-primary">
                             <i data-lucide="log-in" class="w-4 h-4"></i>
-                            Masuk
+                            Login
                         </button>
                     </div>
                 </form>
@@ -609,21 +654,11 @@
         </div>
     </div>
 
+    <!-- ===== FIREBASE INIT SCRIPT ===== -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import {   
-            getFirestore,   
-            collection,   
-            addDoc,   
-            onSnapshot,   
-            doc,   
-            deleteDoc,   
-            updateDoc,   
-            getDocs,   
-            writeBatch   
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // ============================================
         const firebaseConfig = {
             apiKey: "AIzaSyBb3HZbY7Tk6gWQagRSEOhi0dZVZ5mWFDA",
             authDomain: "showcaseitsbad.firebaseapp.com",
@@ -633,23 +668,31 @@
             appId: "1:964069299303:web:dfcc88ced5a701ce2eb0c2"
         };
 
-        let db, auth, user;
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.getAuth();
+        const db = firebase.getFirestore();
+        const storage = firebase.getStorage();
+
+        // ============================================
+        // GLOBAL STATE
+        // ============================================
         let isAdmin = false;
         let allProducts = [];
         let currentPlatform = null;
         let isEditing = false;
 
+        // ============================================
+        // INITIALIZATION
+        // ============================================
         async function init() {
             try {
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                const cred = await signInAnonymously(auth);
-                user = cred.user;
+                await firebase.signInAnonymously(auth);
                 hideLoader();
-                setupRealtimeData();
-            } catch (err) {
-                console.error(err);
+                setupRealtimeListener();
+                initLucideIcons();
+            } catch (error) {
+                console.error('Firebase Init Error:', error);
                 hideLoader();
             }
         }
@@ -660,19 +703,38 @@
             setTimeout(() => {
                 loader.classList.add('hidden');
                 document.getElementById('landing-view').classList.remove('hidden');
-                lucide.createIcons();
-            }, 700);
+            }, 1000);
         }
 
-        function setupRealtimeData() {
-            if (!user) return;
-            const colRef = collection(db, 'products');
-            onSnapshot(colRef, (snapshot) => {
-                allProducts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                if (currentPlatform) renderGrid();
+        function initLucideIcons() {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        // ============================================
+        // REALTIME DATABASE LISTENER
+        // ============================================
+        function setupRealtimeListener() {
+            const productsRef = firebase.collection(db, 'products');
+            
+            firebase.onSnapshot(productsRef, (snapshot) => {
+                allProducts = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+                if (currentPlatform) {
+                    renderProductGrid();
+                }
+            }, (error) => {
+                console.error('Snapshot Error:', error);
             });
         }
 
+        // ============================================
+        // VIEW NAVIGATION
+        // ============================================
         window.switchView = (view, platform = null) => {
             document.getElementById('landing-view').classList.add('hidden');
             document.getElementById('showcase-view').classList.add('hidden');
@@ -684,24 +746,32 @@
                 document.getElementById('showcase-view').classList.remove('hidden');
                 currentPlatform = platform;
                 
-                const titles = {
+                const platformTitles = {
                     'shopee': 'SHOPEE PREMIUM',
                     'tiktok': 'TIKTOK VIRAL',
                     'tokopedia': 'TOKOPEDIA POWER'
                 };
                 
-                document.getElementById('platform-title-nav').innerText = titles[platform] || platform.toUpperCase();
-                renderGrid();
+                document.getElementById('platform-title-nav').innerText = platformTitles[platform] || platform.toUpperCase();
+                renderProductGrid();
             }
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
             setTimeout(() => lucide.createIcons(), 50);
         };
 
+        // ============================================
+        // ADMIN AUTHENTICATION
+        // ============================================
         window.toggleLoginModal = (show) => {
             const modal = document.getElementById('login-modal');
             modal.classList.toggle('hidden', !show);
-            if (show) modal.classList.add('flex');
-            else modal.classList.remove('flex');
+            if (show) {
+                modal.classList.add('flex');
+                document.getElementById('login-pass').value = '';
+            } else {
+                modal.classList.remove('flex');
+            }
         };
 
         document.getElementById('login-form').onsubmit = (e) => {
@@ -712,10 +782,10 @@
                 document.getElementById('admin-panel').classList.remove('hidden');
                 document.getElementById('admin-indicator').classList.remove('hidden');
                 document.getElementById('spacer-nav').classList.add('hidden');
-                renderGrid();
+                renderProductGrid();
                 lucide.createIcons();
             } else {
-                alert("Password salah!");
+                alert('❌ Access Denied: Invalid Password');
             }
         };
 
@@ -725,50 +795,57 @@
             document.getElementById('admin-indicator').classList.add('hidden');
             document.getElementById('spacer-nav').classList.remove('hidden');
             resetForm();
-            renderGrid();
+            renderProductGrid();
             lucide.createIcons();
         };
 
+        // ============================================
+        // CRUD OPERATIONS
+        // ============================================
         document.getElementById('product-form').onsubmit = async (e) => {
             e.preventDefault();
             if (!isAdmin) return;
 
-            const payload = {
+            const productData = {
                 title: document.getElementById('in-title').value,
                 description: document.getElementById('in-desc').value,
                 link: document.getElementById('in-link').value,
                 image: document.getElementById('in-image').value || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f',
                 sortOrder: parseInt(document.getElementById('in-order').value) || 0,
                 platform: currentPlatform,
-                updatedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString(),
+                createdAt: isEditing ? null : new Date().toISOString()
             };
 
             try {
                 if (isEditing) {
                     const id = document.getElementById('edit-id').value;
-                    await updateDoc(doc(db, 'products', id), payload);
-                    alert("Produk diperbarui!");
+                    await firebase.updateDoc(firebase.doc(db, 'products', id), productData);
+                    alert('✅ Product updated successfully!');
                 } else {
-                    await addDoc(collection(db, 'products'), payload);
-                    alert("Produk disimpan!");
+                    await firebase.addDoc(firebase.collection(db, 'products'), productData);
+                    alert('✅ Product saved successfully!');
                 }
                 resetForm();
-            } catch (err) {
-                alert("Gagal: " + err.message);
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
             }
         };
 
         window.clearAllData = async () => {
             if (!isAdmin) return;
-            if (confirm("Hapus SEMUA produk?")) {
+            
+            if (confirm('⚠️ WARNING: This will permanently delete ALL products. Continue?')) {
                 try {
-                    const snapshot = await getDocs(collection(db, 'products'));
-                    const batch = writeBatch(db);
-                    snapshot.docs.forEach(d => batch.delete(doc(db, 'products', d.id)));
+                    const snapshot = await firebase.getDocs(firebase.collection(db, 'products'));
+                    const batch = firebase.writeBatch(db);
+                    snapshot.docs.forEach(doc => {
+                        batch.delete(firebase.doc(db, 'products', doc.id));
+                    });
                     await batch.commit();
-                    alert("Semua data dihapus!");
-                } catch (err) { 
-                    alert("Error: " + err.message); 
+                    alert('✅ All products deleted successfully');
+                } catch (error) {
+                    alert('❌ Error: ' + error.message);
                 }
             }
         };
@@ -777,46 +854,50 @@
             isEditing = false;
             document.getElementById('product-form').reset();
             document.getElementById('edit-id').value = '';
-            document.getElementById('btn-submit').innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Simpan ke Database';
-            document.getElementById('form-label').innerHTML = 'Kelola Produk';
+            document.getElementById('btn-submit').innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save to Database';
+            document.getElementById('form-label').innerHTML = 'Product Management';
             lucide.createIcons();
         };
 
         window.startEdit = (id) => {
-            const p = allProducts.find(x => x.id === id);
-            if (!p) return;
+            const product = allProducts.find(p => p.id === id);
+            if (!product) return;
             
             isEditing = true;
-            document.getElementById('edit-id').value = p.id;
-            document.getElementById('in-title').value = p.title || '';
-            document.getElementById('in-desc').value = p.description || '';
-            document.getElementById('in-link').value = p.link || '';
-            document.getElementById('in-image').value = p.image || '';
-            document.getElementById('in-order').value = p.sortOrder || 0;
+            document.getElementById('edit-id').value = product.id;
+            document.getElementById('in-title').value = product.title || '';
+            document.getElementById('in-desc').value = product.description || '';
+            document.getElementById('in-link').value = product.link || '';
+            document.getElementById('in-image').value = product.image || '';
+            document.getElementById('in-order').value = product.sortOrder || 0;
             
-            document.getElementById('btn-submit').innerHTML = '<i data-lucide="edit-3" class="w-4 h-4"></i> Update Data';
-            document.getElementById('form-label').innerHTML = 'Edit Produk';
+            document.getElementById('btn-submit').innerHTML = '<i data-lucide="edit-3" class="w-4 h-4"></i> Update Product';
+            document.getElementById('form-label').innerHTML = 'Edit Product';
             lucide.createIcons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.deleteProd = async (id) => {
-            if (confirm("Hapus produk ini?")) {
+            if (confirm('Delete this product?')) {
                 try {
-                    await deleteDoc(doc(db, 'products', id));
-                } catch (e) { 
-                    alert("Error: " + e.message); 
+                    await firebase.deleteDoc(firebase.doc(db, 'products', id));
+                } catch (error) {
+                    alert('❌ Error: ' + error.message);
                 }
             }
         };
 
+        // ============================================
+        // FILE UPLOAD HANDLER
+        // ============================================
         document.getElementById('file-input').onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                if (file.size > 1000000) { 
-                    alert("Maksimal 1MB"); 
-                    return; 
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('⚠️ File size must be less than 2MB');
+                    return;
                 }
+                
                 const reader = new FileReader();
                 reader.onload = () => {
                     document.getElementById('in-image').value = reader.result;
@@ -825,7 +906,10 @@
             }
         };
 
-        function renderGrid() {
+        // ============================================
+        // RENDER PRODUCT GRID
+        // ============================================
+        function renderProductGrid() {
             const grid = document.getElementById('product-grid');
             const empty = document.getElementById('empty-msg');
             
@@ -836,46 +920,55 @@
             if (filtered.length === 0) {
                 grid.innerHTML = '';
                 empty.classList.remove('hidden');
+                lucide.createIcons();
                 return;
             }
 
             empty.classList.add('hidden');
             
-            grid.innerHTML = filtered.map((p, i) => `
-                <div class="product-card">
-                    <div class="product-image-container">
-                        <img src="${p.image}" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                             alt="${p.title}"
+            grid.innerHTML = filtered.map((product, index) => `
+                <div class="product-card group">
+                    <!-- Image Section -->
+                    <div class="product-image">
+                        <img src="${product.image}" 
+                             alt="${product.title}"
                              loading="lazy"
-                             onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                             onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f'">
+                        <div class="product-overlay"></div>
+                        
+                        <!-- Rank Badge -->
                         <div class="absolute top-4 left-4">
-                            <span class="badge">
-                                <span class="w-1 h-1 bg-purple-600 rounded-full"></span>
-                                #${p.sortOrder || i + 1}
-                            </span>
+                            <div class="badge-premium">
+                                <span class="w-1.5 h-1.5 bg-purple-600 rounded-full"></span>
+                                #${product.sortOrder || index + 1}
+                            </div>
                         </div>
+                        
                         ${isAdmin ? `
                             <div class="absolute top-4 right-4 flex gap-2">
-                                <button onclick="startEdit('${p.id}')" class="w-9 h-9 bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-colors border border-white/20">
+                                <button onclick="startEdit('${product.id}')" class="w-10 h-10 bg-black/70 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all border border-white/20">
                                     <i data-lucide="edit-3" class="w-4 h-4"></i>
                                 </button>
-                                <button onclick="deleteProd('${p.id}')" class="w-9 h-9 bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors border border-white/20">
+                                <button onclick="deleteProd('${product.id}')" class="w-10 h-10 bg-black/70 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition-all border border-white/20">
                                     <i data-lucide="trash-2" class="w-4 h-4"></i>
                                 </button>
                             </div>
                         ` : ''}
                     </div>
                     
-                    <div class="product-content">
-                        <div class="layout-stack spacing-xs">
-                            <h4 class="text-heading-3 font-grotesk text-white line-clamp-1">${p.title}</h4>
-                            <p class="text-body-small text-neutral-500 line-clamp-2">${p.description || "Premium product recommendation from Itsbad."}</p>
+                    <!-- Content Section -->
+                    <div class="p-6 flex flex-col gap-4">
+                        <div class="flex flex-col gap-2">
+                            <h4 class="heading-3 font-grotesk text-white line-clamp-1 group-hover:gradient-text transition-all">
+                                ${product.title}
+                            </h4>
+                            <p class="body-sm text-neutral-500 line-clamp-2">
+                                ${product.description || 'Premium product recommendation from Itsbad.'}
+                            </p>
                         </div>
                         
-                        <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="btn-buy w-full">
-                            <span>Beli Sekarang</span>
+                        <a href="${product.link}" target="_blank" rel="noopener noreferrer" class="btn-outline w-full">
+                            <span>Buy Now</span>
                             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                         </a>
                     </div>
@@ -885,6 +978,7 @@
             lucide.createIcons();
         }
 
+        // Initialize App
         init();
     </script>
 </body>
