@@ -354,7 +354,7 @@
             <div class="flex justify-center fade-up">
                 <div class="badge">
                     <span class="w-1.5 h-1.5 bg-purple-600 rounded-full"></span>
-                    <span class="text-white/80">Premium Product Recommendations</span>
+                    <span class="text-white/80">Product Recommendations</span>
                     <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
                 </div>
             </div>
@@ -362,14 +362,14 @@
             <!-- Hero Section - Center -->
             <div class="layout-stack items-center spacing-lg fade-up">
                 <h1 class="text-title-1 font-grotesk text-center">
-                    <span class="bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">ITS</span>
-                    <span class="text-white">BAD.</span>
+                    <span class="bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text">ITSBAD</span>
+                    <span class="text-white">Showcase.</span>
                 </h1>
                 <div class="flex justify-center gap-2">
                     <div class="w-12 h-[2px] bg-gradient-to-r from-transparent via-purple-600 to-transparent"></div>
                     <div class="w-12 h-[2px] bg-gradient-to-r from-transparent via-blue-600 to-transparent"></div>
                 </div>
-                <p class="text-overline text-neutral-600">Curated Selection • 2026</p>
+                <p class="text-overline text-neutral-600">Sedulur saklawase • 2022</p>
             </div>
 
             <!-- Platform Cards Grid -->
@@ -571,7 +571,7 @@
                     </div>
                     <div class="layout-stack items-center spacing-xs">
                         <p class="text-heading-3 text-neutral-600">Belum Ada Produk</p>
-                        <p class="text-overline-small text-neutral-700">Tambahkan produk melalui admin panel</p>
+                        <p class="text-overline-small text-neutral-700">Admin belum menambah produk rekomendasi</p>
                     </div>
                 </div>
             </div>
@@ -685,9 +685,9 @@
                 currentPlatform = platform;
                 
                 const titles = {
-                    'shopee': 'SHOPEE PREMIUM',
-                    'tiktok': 'TIKTOK VIRAL',
-                    'tokopedia': 'TOKOPEDIA POWER'
+                    'shopee': 'SHOPEE Showcase',
+                    'tiktok': 'TIKTOK-SHOP Showcase',
+                    'tokopedia': 'TOKOPEDIA Showcase'
                 };
                 
                 document.getElementById('platform-title-nav').innerText = titles[platform] || platform.toUpperCase();
@@ -813,8 +813,8 @@
         document.getElementById('file-input').onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                if (file.size > 1000000) { 
-                    alert("Maksimal 1MB"); 
+                if (file.size > 5000000) { 
+                    alert("Maksimal 5MB"); 
                     return; 
                 }
                 const reader = new FileReader();
